@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::table('reviews', function (Blueprint $table) {
             $table->text('admin_reply')->nullable();
             $table->timestamp('admin_reply_at')->nullable();
-            $table->integer('likes')->default(0);
-            $table->integer('dislikes')->default(0);
         });
 
         // Создаем таблицу для хранения голосов пользователей

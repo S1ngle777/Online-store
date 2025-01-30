@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReviewVoteController;
+use App\Http\Controllers\SearchController;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
@@ -77,7 +78,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/admin/orders', [OrderController::class, 'adminIndex'])->name('admin.orders.index');
 
-
+    Route::post('/reviews/{review}/reply', [ReviewController::class, 'replyAsAdmin'])->name('reviews.reply');
 });
 
 // Общие маршруты
@@ -88,5 +89,7 @@ Route::get('/categories', [CategoryController::class, 'index'])->name('categorie
 Route::get('/categories/{category:slug}', [CategoryController::class, 'show'])->name('categories.show');
 
 Route::get('/about', [AboutController::class, 'index'])->name('about');
+
+Route::get('/search', [SearchController::class, 'index'])->name('search');
 
 require __DIR__.'/auth.php';

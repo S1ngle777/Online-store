@@ -139,28 +139,76 @@
                     <!-- Список отзывов -->
                     @foreach ($reviews as $review)
                         <div class="border-b pb-4 mb-4">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <!-- Рейтинг и информация о пользователе -->
+                            <div>
+                                <!-- Рейтинг и кнопка удаления на одном уровне -->
+                                <div class="flex items-center justify-between">
                                     <div class="flex items-center">
-                                        <!-- Звезды рейтинга -->
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <svg class="w-5 h-5 {{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }}"
+                                                 fill="currentColor"
+                                                 viewBox="0 0 20 20"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                            </svg>
+                                        @endfor
                                     </div>
-                                    <p class="mt-2 text-gray-600">{{ $review->comment }}</p>
-                                    
-                                    <!-- Ответ администратора -->
-                                    @if($review->admin_reply)
-                                        <div class="mt-3 pl-4 border-l-4 border-primary">
-                                            <p class="text-sm text-gray-600">
-                                                <span class="font-semibold">Ответ администратора:</span>
-                                                {{ $review->admin_reply }}
-                                            </p>
-                                            <p class="text-xs text-gray-500">{{ $review->admin_reply_at->diffForHumans() }}</p>
-                                        </div>
-                                    @endif
 
-                                    <!-- Лайки/дизлайки -->
-                                    @auth
-                                        <div class="mt-3 flex items-center space-x-4">
+                                    <!-- Кнопка удаления -->
+                                    @if(auth()->id() === $review->user_id || (auth()->user() && auth()->user()->isAdmin()))
+                                        <form action="{{ route('reviews.destroy', $review) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-500 hover:text-red-700" 
+                                                    onclick="return confirm('Вы уверены, что хотите удалить этот отзыв?')">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
+
+                                <!-- Имя пользователя и время -->
+                                <div class="flex items-center mt-1">
+                                    <span class="text-sm text-gray-500">{{ $review->user->name }}</span>
+                                    <span class="mx-2 text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">{{ $review->created_at->diffForHumans() }}</span>
+                                </div>
+
+                                <p class="mt-2 text-gray-600">{{ $review->comment }}</p>
+
+                                <!-- Ответ администратора -->
+                                @if($review->admin_reply)
+                                    <div class="mt-3 pl-4 border-l-4 border-primary">
+                                        <p class="text-sm text-gray-600">
+                                            <span class="font-semibold">Ответ администратора:</span>
+                                            {{ $review->admin_reply }}
+                                        </p>
+                                        <p class="text-xs text-gray-500">{{ $review->admin_reply_at->diffForHumans() }}</p>
+                                    </div>
+                                @endif
+
+                                <!-- Форма ответа администратора -->
+                                @if(auth()->check() && auth()->user()->isAdmin() && !$review->admin_reply)
+                                    <form action="{{ route('reviews.reply', $review) }}" method="POST" class="mt-3">
+                                        @csrf
+                                        <div class="flex items-start space-x-2">
+                                            <textarea name="admin_reply" 
+                                                    rows="2" 
+                                                    class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                                    placeholder="Ответить на отзыв..."></textarea>
+                                            <button type="submit" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark">
+                                                Ответить
+                                            </button>
+                                        </div>
+                                    </form>
+                                @endif
+
+                                <!-- Лайки и дизлайки -->
+                                @auth
+                                    <div class="mt-3">
+                                        <div class="flex items-center space-x-4">
                                             <form action="{{ route('reviews.vote', $review) }}" method="POST" class="flex items-center">
                                                 @csrf
                                                 <input type="hidden" name="vote_type" value="like">
@@ -168,7 +216,7 @@
                                                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                                         <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/>
                                                     </svg>
-                                                    <span>{{ $review->likes }}</span>
+                                                    <span>{{ $review->votes->where('vote_type', 'like')->count() }}</span>
                                                 </button>
                                             </form>
 
@@ -179,28 +227,12 @@
                                                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                                         <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z"/>
                                                     </svg>
-                                                    <span>{{ $review->dislikes }}</span>
+                                                    <span>{{ $review->votes->where('vote_type', 'dislike')->count() }}</span>
                                                 </button>
                                             </form>
                                         </div>
-                                    @endauth
-                                </div>
-
-                                <!-- Форма ответа администратора -->
-                                @if(auth()->user()?->isAdmin() && !$review->admin_reply)
-                                    <form action="{{ route('reviews.admin-reply', $review) }}" method="POST" class="mt-3">
-                                        @csrf
-                                        <textarea name="admin_reply" 
-                                                  class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                                  rows="2"
-                                                  placeholder="Ответить на отзыв..."></textarea>
-                                        <div class="mt-2 flex justify-end">
-                                            <x-primary-button type="submit">
-                                                Ответить
-                                            </x-primary-button>
-                                        </div>
-                                    </form>
-                                @endif
+                                    </div>
+                                @endauth
                             </div>
                         </div>
                     @endforeach

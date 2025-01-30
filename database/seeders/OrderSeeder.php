@@ -60,7 +60,7 @@ class OrderSeeder extends Seeder
                 'phone' => '123312',
                 'address' => '123132',
                 'total_amount' => 1050,
-                'status' => 'pending',
+                'status' => 'completed',
                 'notes' => null,
                 'created_at' => '2024-12-04 17:41:47',
                 'updated_at' => '2024-12-04 17:41:47'
