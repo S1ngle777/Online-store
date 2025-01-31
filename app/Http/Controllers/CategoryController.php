@@ -36,7 +36,7 @@ class CategoryController extends Controller
         Category::create($validated);
         
         return redirect()->route('categories.index')
-            ->with('success', 'Category created successfully');
+            ->with('success', 'Категория успешно создана');
     }
 
     public function edit(Category $category)
@@ -55,7 +55,7 @@ class CategoryController extends Controller
         $category->update($validated);
         
         return redirect()->route('categories.index')
-            ->with('success', 'Category updated successfully');
+            ->with('success', 'Категория успешно обновлена');
     }
 
     public function destroy(Category $category)
@@ -63,6 +63,6 @@ class CategoryController extends Controller
         $category->delete();
         
         return redirect()->route('categories.index')
-            ->with('success', 'Category deleted successfully');
+            ->with('success', 'Категория успешно удалена');
     }
 }

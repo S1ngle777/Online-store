@@ -1,8 +1,29 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ $product->name }}
-        </h2>
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ $product->name }}
+            </h2>
+            @auth
+                @if(auth()->user()->isAdmin())
+                    <div class="flex space-x-4">
+                        <a href="{{ route('products.edit', $product) }}" 
+                           class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            Изменить товар
+                        </a>
+                        <form action="{{ route('products.destroy', $product) }}" method="POST" 
+                              onsubmit="return confirm('Вы уверены, что хотите удалить этот товар?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" 
+                                    class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                Удалить товар
+                            </button>
+                        </form>
+                    </div>
+                @endif
+            @endauth
+        </div>
     </x-slot>
 
     <div class="py-12">

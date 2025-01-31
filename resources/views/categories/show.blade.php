@@ -9,12 +9,15 @@
                 @if (auth()->user()->isAdmin())
                     <div class="flex space-x-2">
                         <a href="{{ route('categories.edit', $category) }}"
-                            class="text-indigo-600 font-semibold text-lg hover:text-indigo-900">Изменить</a>
-                        <form action="{{ route('categories.destroy', $category) }}" method="POST" class="inline">
+                            class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            Изменить
+                        </a>
+                        <form action="{{ route('categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Вы уверены, что хотите удалить эту категорию?')">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="text-red-600 font-semibold text-lg hover:text-red-900"
-                                onclick="return confirm('Are you sure?')">Удалить</button>
+                            <button type="submit"
+                                class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                Удалить</button>
                         </form>
                     </div>
                 @endif
@@ -34,9 +37,8 @@
                         <div class="p-6">
                             @if ($product->image)
                                 <a href="{{ route('products.show', $product) }}" class="block mb-4">
-                                    <img src="{{ Storage::url($product->image) }}" 
-                                         alt="{{ $product->name }}"
-                                         class="w-full h-48 object-cover transition-opacity hover:opacity-75">
+                                    <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}"
+                                        class="w-full h-48 object-cover transition-opacity hover:opacity-75">
                                 </a>
                             @endif
                             <h3 class="text-lg font-semibold">{{ $product->name }}</h3>
