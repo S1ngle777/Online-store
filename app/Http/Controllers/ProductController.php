@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -129,7 +130,9 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'discount' => 'nullable|numeric|min:0|max:100',
+            'discount_ends_at' => 'nullable|date',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
@@ -141,10 +144,21 @@ class ProductController extends Controller
             $validated['image'] = $request->file('image')->store('products', 'public');
         }
 
+        // Обработка скидки
+        if (!isset($validated['discount'])) {
+            $validated['discount'] = 0;
+            $validated['discount_ends_at'] = null;
+        } else {
+            $validated['discount'] = floatval($validated['discount']);
+            $validated['discount_ends_at'] = $request->filled('discount_ends_at') 
+                ? Carbon::parse($request->discount_ends_at)
+                : null;
+        }
+
         $product->update($validated);
 
         return redirect()->route('products.index')
-            ->with('success', 'Product updated successfully.');
+            ->with('success', 'Товар успешно обновлен');
     }
 
     public function destroy(Product $product)

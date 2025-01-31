@@ -47,7 +47,17 @@
                                 </p>
                                 
                                 <div class="flex justify-between items-center">
-                                    <span class="font-bold">{{ $product->price }} MDL</span>
+                                    <div>
+                                        @if($product->hasActiveDiscount())
+                                            <span class="line-through text-gray-500 text-sm">{{ $product->price }} MDL</span>
+                                            <span class="font-bold text-red-600">{{ number_format($product->discounted_price, 2) }} MDL</span>
+                                            <span class="ml-2 bg-red-100 text-red-800 text-xs font-semibold px-2 py-0.5 rounded">
+                                                -{{ $product->discount }}%
+                                            </span>
+                                        @else
+                                            <span class="font-bold">{{ $product->price }} MDL</span>
+                                        @endif
+                                    </div>
                                     @auth
                                         <form action="{{ route('cart.add', $product) }}" method="POST">
                                             @csrf

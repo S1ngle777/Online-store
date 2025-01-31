@@ -60,6 +60,29 @@
                             <x-input-error :messages="$errors->get('image')" class="mt-2" />
                         </div>
 
+                        <div class="mt-4">
+                            <x-input-label for="discount" :value="__('Скидка (%)')" />
+                            <x-text-input id="discount" 
+                                          class="block mt-1 w-full" 
+                                          type="number" 
+                                          name="discount" 
+                                          min="0"
+                                          max="100"
+                                          step="0.01" 
+                                          :value="old('discount', $product->discount)" />
+                            <x-input-error :messages="$errors->get('discount')" class="mt-2" />
+                        </div>
+
+                        <div class="mt-4">
+                            <x-input-label for="discount_ends_at" :value="__('Действует до')" />
+                            <x-text-input id="discount_ends_at" 
+                                          class="block mt-1 w-full" 
+                                          type="datetime-local" 
+                                          name="discount_ends_at" 
+                                          :value="old('discount_ends_at', $product->discount_ends_at?->format('Y-m-d\TH:i'))" />
+                            <x-input-error :messages="$errors->get('discount_ends_at')" class="mt-2" />
+                        </div>
+
                         <div class="flex items-center justify-end mt-4">
                             <x-primary-button class="ml-4">
                                 {{ __('Изменить товар') }}

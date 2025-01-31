@@ -56,7 +56,24 @@
                                 </div>
                             </div>
                             <p class="text-gray-600 mt-4">{{ $product->description }}</p>
-                            <p class="text-2xl font-bold mt-4">{{ $product->price }} MDL</p>
+                            @if($product->hasActiveDiscount())
+                                <div class="mt-4">
+                                    <span class="line-through text-gray-500">{{ $product->price }} MDL</span>
+                                    <span class="text-2xl font-bold text-red-600 ml-2">
+                                        {{ number_format($product->discounted_price, 2) }} MDL
+                                    </span>
+                                    <span class="ml-2 bg-red-100 text-red-800 text-sm font-semibold px-2.5 py-0.5 rounded">
+                                        -{{ $product->discount }}%
+                                    </span>
+                                    @if($product->discount_ends_at)
+                                        <p class="text-sm text-gray-500 mt-1">
+                                            Акция действует до {{ $product->discount_ends_at->format('d.m.Y H:i') }}
+                                        </p>
+                                    @endif
+                                </div>
+                            @else
+                                <p class="text-2xl font-bold mt-4">{{ $product->price }} MDL</p>
+                            @endif
                             <p class="text-gray-600 mt-2">В наличии: {{ $product->stock }}</p>
                             
                             @auth

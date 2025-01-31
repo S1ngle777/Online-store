@@ -12,12 +12,25 @@ class OrderController extends Controller
     {
         $cartItems = session()->get('cart', []);
         $totalPrice = 0;
+        $totalOriginalPrice = 0;
 
-        foreach ($cartItems as $item) {
-            $totalPrice += $item['price'] * $item['quantity'];
+        // Обновляем цены для всех товаров в корзине перед оформлением заказа
+        foreach ($cartItems as $id => &$item) {
+            $product = Product::find($id);
+            if ($product) {
+                $item['original_price'] = $product->price;
+                $item['price'] = $product->hasActiveDiscount() ? $product->discounted_price : $product->price;
+                $totalPrice += $item['price'] * $item['quantity'];
+                $totalOriginalPrice += $item['original_price'] * $item['quantity'];
+            }
         }
+        
+        $totalSaving = $totalOriginalPrice - $totalPrice;
+        
+        // Сохраняем обновленную корзину с актуальными ценами
+        session()->put('cart', $cartItems);
 
-        return view('orders.checkout', compact('cartItems', 'totalPrice'));
+        return view('orders.checkout', compact('cartItems', 'totalPrice', 'totalOriginalPrice', 'totalSaving'));
     }
 
     public function store(Request $request)

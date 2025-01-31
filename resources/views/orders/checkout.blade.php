@@ -58,26 +58,56 @@
                                 
                                 <div class="space-y-4">
                                     @foreach ($cartItems as $id => $item)
-                                        <div class="flex justify-between items-center">
+                                        <div class="flex justify-between items-center border-b pb-4">
                                             <div>
                                                 <h4 class="font-medium">{{ $item['name'] }}</h4>
                                                 <p class="text-sm text-gray-600">
-                                                    {{ $item['quantity'] }} x {{ $item['price'] }} MDL
-                                                    @if ($errors->has("items.$id.quantity"))
+                                                    Кл-во {{ $item['quantity'] }}
+                                                    @if(isset($item['original_price']) && $item['original_price'] > $item['price'])
+                                                        <span class="text-green-600 ml-2">
+                                                            -{{ number_format((1 - $item['price'] / $item['original_price']) * 100, 0) }}%
+                                                        </span>
+                                                    @endif
+                                                    @if($errors->has("items.$id.quantity"))
                                                         <span class="text-red-600 text-sm">
                                                             (Доступно только {{ $available[$id] ?? 0 }} шт.)
                                                         </span>
                                                     @endif
                                                 </p>
+                                                <div class="mt-1">
+                                                    @if(isset($item['original_price']) && $item['original_price'] > $item['price'])
+                                                        <span class="line-through text-sm text-gray-500">{{ number_format($item['original_price'] * $item['quantity'], 2) }} MDL</span>
+                                                        <span class="text-red-600 ml-2">{{ number_format($item['price'] * $item['quantity'], 2) }} MDL</span>
+                                                    @else
+                                                        <span>{{ number_format($item['price'] * $item['quantity'], 2) }} MDL</span>
+                                                    @endif
+                                                </div>
                                             </div>
-                                            <p class="font-medium">{{ $item['price'] * $item['quantity'] }} MDL</p>
                                         </div>
                                     @endforeach
                                     
                                     <div class="border-t pt-4 mt-4">
+                                        @if($totalSaving > 0)
+                                            <div class="bg-green-50 p-4 rounded-md mb-4">
+                                                <div class="text-green-700">
+                                                    <p>Ваша экономия: <span class="font-bold">{{ number_format($totalSaving, 2) }} MDL</span></p>
+                                                    <p class="text-sm mt-1">
+                                                        <span class="line-through">{{ number_format($totalOriginalPrice, 2) }} MDL</span> → 
+                                                        <span class="font-semibold">{{ number_format($totalPrice, 2) }} MDL</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        @endif
                                         <div class="flex justify-between items-center font-bold">
                                             <p>Итого:</p>
-                                            <p>{{ $totalPrice }} MDL</p>
+                                            <div class="text-right">
+                                                @if($totalSaving > 0)
+                                                    <span class="line-through text-sm text-gray-500">{{ number_format($totalOriginalPrice, 2) }} MDL</span><br>
+                                                @endif
+                                                <span class="font-bold {{ $totalSaving > 0 ? 'text-red-600' : '' }}">
+                                                    {{ number_format($totalPrice, 2) }} MDL
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

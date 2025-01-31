@@ -25,11 +25,25 @@
                                             <div>
                                                 <div class="flex justify-between text-base font-medium text-gray-900">
                                                     <h3>{{ $item['name'] }}</h3>
-                                                    <p class="ml-4"><?php echo e($item['price'] * $item['quantity']); ?> MDL</p>
+                                                    <div class="text-right">
+                                                        @if(isset($item['original_price']) && $item['original_price'] > $item['price'])
+                                                            <span class="line-through text-sm text-gray-500">{{ $item['original_price'] * $item['quantity'] }} MDL</span>
+                                                            <p class="text-red-600">{{ $item['price'] * $item['quantity'] }} MDL</p>
+                                                        @else
+                                                            <p>{{ $item['price'] * $item['quantity'] }} MDL</p>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="flex flex-1 items-end justify-between text-sm">
-                                                <p class="text-gray-500">Кл-во {{ $item['quantity'] }}</p>
+                                                <p class="text-gray-500">
+                                                    Кл-во {{ $item['quantity'] }} 
+                                                    @if(isset($item['original_price']) && $item['original_price'] > $item['price'])
+                                                        <span class="text-green-600 ml-2">
+                                                            -{{ number_format((1 - $item['price'] / $item['original_price']) * 100, 0) }}%
+                                                        </span>
+                                                    @endif
+                                                </p>
                                                 <form action="{{ route('cart.remove', $id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
@@ -46,9 +60,27 @@
                         <hr class="my-6 border-t border-gray-200">
 
                         <div class="mt-6">
+                            @if($totalSaving > 0)
+                                <div class="bg-green-50 p-4 rounded-md mb-4">
+                                    <div class="text-green-700">
+                                        <p>Ваша экономия: <span class="font-bold">{{ number_format($totalSaving, 2) }} MDL</span></p>
+                                        <p class="text-sm mt-1">
+                                            <span class="line-through">{{ number_format($totalOriginalPrice, 2) }} MDL</span> → 
+                                            <span class="font-semibold">{{ number_format($totalPrice, 2) }} MDL</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            @endif
                             <div class="flex justify-between text-base font-medium text-gray-900">
                                 <p>Всего</p>
-                                <p>{{ $totalPrice }} MDL</p>
+                                <div class="text-right">
+                                    @if($totalSaving > 0)
+                                        <span class="line-through text-sm text-gray-500">{{ number_format($totalOriginalPrice, 2) }} MDL</span><br>
+                                    @endif
+                                    <span class="font-bold {{ $totalSaving > 0 ? 'text-red-600' : '' }}">
+                                        {{ number_format($totalPrice, 2) }} MDL
+                                    </span>
+                                </div>
                             </div>
                             <div class="mt-6">
                                 <a href="{{ route('orders.checkout') }}"

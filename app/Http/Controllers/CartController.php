@@ -11,12 +11,25 @@ class CartController extends Controller
     {
         $cartItems = session()->get('cart', []);
         $totalPrice = 0;
+        $totalOriginalPrice = 0;
         
-        foreach ($cartItems as $item) {
-            $totalPrice += $item['price'] * $item['quantity'];
+        // Обновляем цены для всех товаров в корзине
+        foreach ($cartItems as $id => &$item) {
+            $product = Product::find($id);
+            if ($product) {
+                $item['original_price'] = $product->price; // Сохраняем оригинальную цену
+                $item['price'] = $product->hasActiveDiscount() ? $product->discounted_price : $product->price;
+                $totalPrice += $item['price'] * $item['quantity'];
+                $totalOriginalPrice += $item['original_price'] * $item['quantity'];
+            }
         }
+        
+        $totalSaving = $totalOriginalPrice - $totalPrice;
+        
+        // Сохраняем обновленную корзину
+        session()->put('cart', $cartItems);
 
-        return view('cart.index', compact('cartItems', 'totalPrice'));
+        return view('cart.index', compact('cartItems', 'totalPrice', 'totalSaving', 'totalOriginalPrice'));
     }
 
     public function add(Request $request, Product $product)
@@ -35,10 +48,12 @@ class CartController extends Controller
 
         if (isset($cart[$product->id])) {
             $cart[$product->id]['quantity'] += $quantity;
+            // Обновляем цену при каждом добавлении
+            $cart[$product->id]['price'] = $product->hasActiveDiscount() ? $product->discounted_price : $product->price;
         } else {
             $cart[$product->id] = [
                 'name' => $product->name,
-                'price' => $product->price,
+                'price' => $product->hasActiveDiscount() ? $product->discounted_price : $product->price,
                 'quantity' => $quantity,
                 'image' => $product->image
             ];

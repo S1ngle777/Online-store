@@ -158,27 +158,40 @@
                             <!-- Цена и кнопка (всегда внизу) -->
                             <div class="mt-4">
                                 <div class="flex justify-between items-center">
-                                    <span class="font-bold">{{ $product->price }} MDL</span>
+                                    <div>
+                                        @if ($product->hasActiveDiscount())
+                                            <span class="line-through text-gray-500 text-sm">{{ $product->price }}
+                                                MDL</span>
+                                            <span
+                                                class="font-bold text-red-600">{{ number_format($product->discounted_price, 2) }}
+                                                MDL</span>
+                                            <span
+                                                class="ml-2 bg-red-100 text-red-800 text-xs font-semibold px-2 py-0.5 rounded">
+                                                -{{ $product->discount }}%
+                                            </span>
+                                        @else
+                                            <span class="font-bold">{{ $product->price }} MDL</span>
+                                        @endif
+                                    </div>
                                     @auth
                                         <form action="{{ route('cart.add', $product) }}" method="POST">
                                             @csrf
                                             <x-primary-button>В корзину</x-primary-button>
                                         </form>
+                                    @endauth
+                                </div>
+                                @if (auth()->user()->isAdmin())
+                                    <div class="mt-2 flex space-x-2 justify-end">
+                                        <a href="{{ route('products.edit', $product) }}"
+                                            class="text-indigo-600 hover:text-indigo-900 font-bold">Изменить</a>
+                                        <form action="{{ route('products.destroy', $product) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="text-red-600 hover:text-red-900 font-bold">Удалить</button>
+                                        </form>
                                     </div>
-
-                                    @if (auth()->user()->isAdmin())
-                                        <div class="mt-2 flex space-x-2 justify-end">
-                                            <a href="{{ route('products.edit', $product) }}"
-                                                class="text-indigo-600 hover:text-indigo-900 font-bold">Изменить</a>
-                                            <form action="{{ route('products.destroy', $product) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                    class="text-red-600 hover:text-red-900 font-bold">Удалить</button>
-                                            </form>
-                                        </div>
-                                    @endif
-                                @endauth
+                                @endif
                             </div>
                         </div>
                     </div>
