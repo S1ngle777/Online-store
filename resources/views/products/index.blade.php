@@ -178,20 +178,21 @@
                                             @csrf
                                             <x-primary-button>В корзину</x-primary-button>
                                         </form>
+                                        
+                                        @if (auth()->user()->isAdmin())
+                                            <div class="mt-2 flex space-x-2 justify-end">
+                                                <a href="{{ route('products.edit', $product) }}"
+                                                    class="text-indigo-600 hover:text-indigo-900 font-bold">Изменить</a>
+                                                <form action="{{ route('products.destroy', $product) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="text-red-600 hover:text-red-900 font-bold">Удалить</button>
+                                                </form>
+                                            </div>
+                                        @endif
                                     @endauth
                                 </div>
-                                @if (auth()->user()->isAdmin())
-                                    <div class="mt-2 flex space-x-2 justify-end">
-                                        <a href="{{ route('products.edit', $product) }}"
-                                            class="text-indigo-600 hover:text-indigo-900 font-bold">Изменить</a>
-                                        <form action="{{ route('products.destroy', $product) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="text-red-600 hover:text-red-900 font-bold">Удалить</button>
-                                        </form>
-                                    </div>
-                                @endif
                             </div>
                         </div>
                     </div>

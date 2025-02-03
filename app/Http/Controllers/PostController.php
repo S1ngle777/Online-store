@@ -1,0 +1,97 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Post;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+
+class PostController extends Controller
+{
+    public function index()
+    {
+        $posts = Post::where('is_published', true)
+            ->orderBy('published_at', 'desc')
+            ->paginate(6);
+        return view('blog.index', compact('posts'));
+    }
+
+    public function show(Post $post)
+    {
+        if (!$post->is_published && !auth()->user()?->isAdmin()) {
+            abort(404);
+        }
+        return view('blog.show', compact('post'));
+    }
+
+    public function create()
+    {
+        return view('blog.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|max:255',
+            'content' => 'required',
+            'image' => 'nullable|image|max:2048',
+            'is_published' => 'boolean'
+        ]);
+
+        $validated['slug'] = Str::slug($validated['title']);
+        $validated['user_id'] = auth()->id();
+        
+        if ($request->is_published) {
+            $validated['published_at'] = now();
+        }
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('posts', 'public');
+        }
+
+        Post::create($validated);
+
+        return redirect()->route('blog.index')
+            ->with('success', 'Пост успешно создан');
+    }
+
+    public function edit(Post $post)
+    {
+        return view('blog.edit', compact('post'));
+    }
+
+    public function update(Request $request, Post $post)
+    {
+        $validated = $request->validate([
+            'title' => 'required|max:255',
+            'content' => 'required',
+            'image' => 'nullable|image|max:2048',
+            'is_published' => 'boolean'
+        ]);
+
+        if ($request->hasFile('image')) {
+            if ($post->image) {
+                Storage::disk('public')->delete($post->image);
+            }
+            $validated['image'] = $request->file('image')->store('posts', 'public');
+        }
+
+        $post->update($validated);
+
+        return redirect()->route('blog.show', $post)
+            ->with('success', 'Пост успешно обновлен');
+    }
+
+    public function destroy(Post $post)
+    {
+        if ($post->image) {
+            Storage::disk('public')->delete($post->image);
+        }
+        
+        $post->delete();
+        
+        return redirect()->route('blog.index')
+            ->with('success', 'Пост успешно удален');
+    }
+}

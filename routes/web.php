@@ -4,11 +4,13 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReviewVoteController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\HomeController;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
@@ -24,12 +26,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home', [
-        'products' => Product::latest()->take(6)->get(),
-        'categories' => Category::all()
-    ]);
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -79,6 +76,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/orders', [OrderController::class, 'adminIndex'])->name('admin.orders.index');
 
     Route::post('/reviews/{review}/reply', [ReviewController::class, 'replyAsAdmin'])->name('reviews.reply');
+
+    Route::get('/blog/create', [PostController::class, 'create'])->name('blog.create');
+    Route::post('/blog', [PostController::class, 'store'])->name('blog.store');
+    Route::get('/blog/{post}/edit', [PostController::class, 'edit'])->name('blog.edit');
+    Route::put('/blog/{post}', [PostController::class, 'update'])->name('blog.update');
+    Route::delete('/blog/{post}', [PostController::class, 'destroy'])->name('blog.destroy');
 });
 
 // Общие маршруты
@@ -91,5 +94,8 @@ Route::get('/categories/{category:slug}', [CategoryController::class, 'show'])->
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
+
+Route::get('/blog', [PostController::class, 'index'])->name('blog.index');
+Route::get('/blog/{post:slug}', [PostController::class, 'show'])->name('blog.show');
 
 require __DIR__.'/auth.php';

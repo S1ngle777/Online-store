@@ -28,6 +28,10 @@
                         {{ __('О нас') }}
                     </x-nav-link>
 
+                    <x-nav-link :href="route('blog.index')" :active="request()->routeIs('blog.index')">
+                        {{ __('Блог') }}
+                    </x-nav-link>
+
                     @auth
                         <x-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.index')">
                             {{ __('Корзина') }}
@@ -161,6 +165,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('about')" :active="request()->routeIs('about')">
                 {{ __('О нас') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('blog.index')" :active="request()->routeIs('blog.index')">
+                {{ __('Блог') }}
             </x-responsive-nav-link>
             @auth
                 <x-responsive-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.index')">
