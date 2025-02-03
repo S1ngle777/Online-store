@@ -80,10 +80,53 @@
                                 <form action="{{ route('cart.add', $product) }}" method="POST" class="mt-6">
                                     @csrf
                                     <div class="flex items-center gap-4">
-                                        <x-text-input type="number" name="quantity" value="1" min="1" max="{{ $product->stock }}" />
+                                        <div class="flex items-center border border-gray-300 rounded-md">
+                                            <button type="button" 
+                                                    class="px-3 py-3 text-gray-600 hover:text-gray-700 hover:bg-gray-100 rounded-l-md"
+                                                    onclick="decrementQuantity()">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+                                                </svg>
+                                            </button>
+                                            
+                                            <input type="number" 
+                                                   name="quantity" 
+                                                   id="quantity"
+                                                   value="1" 
+                                                   min="1" 
+                                                   max="{{ $product->stock }}"
+                                                   class="w-12 py-2 text-center border-0 focus:outline-none focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" >
+                                            
+                                            <button type="button"
+                                                    class="px-3 py-3 text-gray-600 hover:text-gray-700 hover:bg-gray-100 rounded-r-md"
+                                                    onclick="incrementQuantity()">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                                </svg>
+                                            </button>
+                                        </div>
                                         <x-primary-button>Добавить в корзину</x-primary-button>
                                     </div>
                                 </form>
+
+                                <script>
+                                    function incrementQuantity() {
+                                        const input = document.getElementById('quantity');
+                                        const maxValue = parseInt(input.getAttribute('max'));
+                                        const currentValue = parseInt(input.value);
+                                        if (currentValue < maxValue) {
+                                            input.value = currentValue + 1;
+                                        }
+                                    }
+
+                                    function decrementQuantity() {
+                                        const input = document.getElementById('quantity');
+                                        const currentValue = parseInt(input.value);
+                                        if (currentValue > 1) {
+                                            input.value = currentValue - 1;
+                                        }
+                                    }
+                                </script>
                             @endauth
                         </div>
                     </div>
