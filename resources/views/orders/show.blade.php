@@ -43,13 +43,32 @@
                         <div>
                             <h3 class="text-lg font-semibold mb-4">Информация о заказе</h3>
                             <div class="space-y-2">
-                                <p><span class="font-medium">Статус:</span> <span
-                                        class="px-2 inline-flex text-s leading-5 font-semibold rounded-full {{ $order->statusBadge['class'] }}">
+                                <p><span class="font-medium">Статус:</span> 
+                                    <span class="px-2 inline-flex text-s leading-5 font-semibold rounded-full {{ $order->statusBadge['class'] }}">
                                         {{ $order->statusBadge['text'] }}
-                                    </span></p>
-                                <p><span class="font-medium">Дата заказа:</span>
-                                    {{ $order->created_at->format('d.m.Y H:i') }}</p>
-                                <p><span class="font-medium">Сумма заказа:</span> {{ $order->total_amount }} MDL</p>
+                                    </span>
+                                </p>
+                                <p><span class="font-medium">Дата заказа:</span> {{ $order->created_at->format('d.m.Y H:i') }}</p>
+                                
+                                <!-- Информация о стоимости -->
+                                <div class="mt-4 space-y-2">
+                                    <p><span class="font-medium">Стоимость товаров:</span> 
+                                        {{ number_format($order->items->sum(function($item) { return $item->price * $item->quantity; }), 2) }} MDL
+                                    </p>
+                                    <p><span class="font-medium">Способ доставки:</span> 
+                                        @if($order->deliveryMethod)
+                                            {{ $order->deliveryMethod->name }}
+                                            <span class="text-sm text-gray-600 ml-2">
+                                                ({{ $order->deliveryMethod->price }} MDL)
+                                            </span>
+                                        @else
+                                            <span class="text-gray-500">Не указан</span>
+                                        @endif
+                                    </p>
+                                    <p class="pt-2 border-t"><span class="font-medium">Итого к оплате:</span> 
+                                        <span class="font-bold">{{ number_format($order->total_amount, 2) }} MDL</span>
+                                    </p>
+                                </div>
                             </div>
 
                             <h3 class="text-lg font-semibold mt-6 mb-4">Контактная информация</h3>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\DeliveryMethod;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -13,6 +14,7 @@ class OrderController extends Controller
         $cartItems = session()->get('cart', []);
         $totalPrice = 0;
         $totalOriginalPrice = 0;
+        $deliveryMethods = DeliveryMethod::where('is_active', true)->get();
 
         // Обновляем цены для всех товаров в корзине перед оформлением заказа
         foreach ($cartItems as $id => &$item) {
@@ -30,7 +32,16 @@ class OrderController extends Controller
         // Сохраняем обновленную корзину с актуальными ценами
         session()->put('cart', $cartItems);
 
-        return view('orders.checkout', compact('cartItems', 'totalPrice', 'totalOriginalPrice', 'totalSaving'));
+        $defaultAddress = auth()->user()->default_address ?? '';
+
+        return view('orders.checkout', compact(
+            'cartItems', 
+            'totalPrice', 
+            'totalOriginalPrice', 
+            'totalSaving',
+            'deliveryMethods',
+            'defaultAddress'
+        ));
     }
 
     public function store(Request $request)
@@ -38,49 +49,48 @@ class OrderController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
-            'phone' => 'required|string|max:255',
+            'phone' => [
+                'required',
+                'regex:/^[0-9]+$/',
+                'min:8',
+                'max:15'
+            ],
             'address' => 'required|string',
-            'notes' => 'nullable|string'
+            'notes' => 'nullable|string',
+            'delivery_method_id' => 'required|exists:delivery_methods,id',
+            'payment_method' => 'required|in:cash,card',
+            'save_address' => 'nullable|boolean'
         ]);
-
-        $cartItems = session()->get('cart', []);
-        if (empty($cartItems)) {
-            return redirect()->back()->with('error', 'Корзина пуста');
-        }
-
-        $totalAmount = 0;
-        $errors = [];
-        $available = []; // Добавляем массив для хранения доступного количества
-
-        // Проверяем наличие достаточного количества каждого товара
-        foreach ($cartItems as $id => $item) {
-            $product = Product::find($id);
-            if (!$product) {
-                $errors[] = "Товар {$item['name']} больше не доступен";
-                continue;
-            }
-            
-            if ($product->stock < $item['quantity']) {
-                $errors[] = "Недостаточно товара {$item['name']} на складе. Доступно: {$product->stock} шт.";
-                $available[$id] = $product->stock; // Сохраняем доступное количество
-                continue;
-            }
-            
-            $totalAmount += $item['price'] * $item['quantity'];
-        }
-
-        // Если есть ошибки, возвращаемся назад с сообщениями
-        if (!empty($errors)) {
-            return redirect()->back()
-                ->with('error', implode('<br>', $errors))
-                ->with('available', $available) // Передаем доступное количество в представление
-                ->withInput();
-        }
 
         try {
             \DB::beginTransaction();
 
-            // Создаем заказ
+            $cartItems = session()->get('cart', []);
+            if (empty($cartItems)) {
+                throw new \Exception('Корзина пуста');
+            }
+
+            // Получить метод доставки и рассчитать итоговые суммы
+            $deliveryMethod = DeliveryMethod::findOrFail($validated['delivery_method_id']);
+            $subtotal = 0;
+
+            foreach ($cartItems as $id => $item) {
+                $product = Product::find($id);
+                if (!$product) {
+                    throw new \Exception("Товар {$item['name']} больше не доступен");
+                }
+
+                if ($product->stock < $item['quantity']) {
+                    throw new \Exception("Недостаточно товара {$item['name']} на складе. Доступно: {$product->stock} шт.");
+                }
+                
+                $subtotal += $item['price'] * $item['quantity'];
+            }
+
+            // Рассчитать итоговую сумму с доставкой
+            $totalAmount = $subtotal + $deliveryMethod->price;
+
+            // Создать заказ
             $order = Order::create([
                 'user_id' => auth()->id(),
                 'name' => $validated['name'],
@@ -88,11 +98,13 @@ class OrderController extends Controller
                 'phone' => $validated['phone'],
                 'address' => $validated['address'],
                 'notes' => $validated['notes'],
-                'total_amount' => $totalAmount,
-                'status' => 'pending'
+                'total_amount' => $totalAmount, // Now includes delivery cost
+                'status' => 'pending',
+                'delivery_method_id' => $deliveryMethod->id,
+                'payment_method' => $validated['payment_method']
             ]);
 
-            // Создаем записи о товарах и уменьшаем их количество
+            // Создать товары заказа и уменьшить запас
             foreach ($cartItems as $id => $item) {
                 OrderItem::create([
                     'order_id' => $order->id,
@@ -105,14 +117,29 @@ class OrderController extends Controller
                 $product->decrement('stock', $item['quantity']);
             }
 
+            // Сохранить адрес, если запрошено
+            if ($request->has('save_address') && $request->boolean('save_address') && auth()->check()) {
+                auth()->user()->update([
+                    'default_address' => $validated['address']
+                ]);
+            }
+
             \DB::commit();
             session()->forget('cart');
 
             return redirect()->route('orders.success', $order)
                 ->with('success', 'Заказ успешно оформлен!');
+
         } catch (\Exception $e) {
             \DB::rollBack();
-            return redirect()->back()->with('error', 'Произошла ошибка при оформлении заказа');
+            
+            // Сохранить данные формы в сессии
+            session()->flash('delivery_method_id', $request->delivery_method_id);
+            session()->flash('payment_method', $request->payment_method);
+            
+            return redirect()->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
         }
     }
 

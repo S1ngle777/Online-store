@@ -47,6 +47,13 @@
                                                     <div class="font-medium text-gray-900">{{ $order->name }}</div>
                                                     <div class="text-gray-500">{{ $order->email }}</div>
                                                     <div class="text-gray-500">{{ $order->phone }}</div>
+                                                    <div class="text-gray-500">
+                                                        <span class="font-medium">Доставка:</span> 
+                                                        {{ $order->deliveryMethod ? $order->deliveryMethod->name : 'Не указан' }}
+                                                    </div>
+                                                    <div class="text-gray-500">
+                                                        <span class="font-medium">Оплата:</span> {{ $order->payment_method_text }}
+                                                    </div>
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">

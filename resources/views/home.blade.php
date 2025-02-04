@@ -104,6 +104,120 @@
                     @endforeach
                 </div>
             </div>
+
+            <!-- FAQ секция -->
+            <div class="mt-12">
+                <h3 class="text-2xl font-bold mb-8 text-center">Часто задаваемые вопросы</h3>
+                
+                <div class="max-w-3xl mx-auto space-y-4">
+                    <div x-data="{ open: false }" class="border rounded-lg overflow-hidden">
+                        <button @click="open = !open" 
+                                class="w-full flex items-center justify-between p-4 bg-white hover:bg-gray-50">
+                            <span class="font-medium">Как оформить заказ?</span>
+                            <svg class="w-5 h-5 transform transition-transform duration-200" 
+                                 :class="{ '-rotate-180': open }"
+                                 fill="none" 
+                                 stroke="currentColor" 
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div x-show="open"
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 transform -translate-y-2"
+                             x-transition:enter-end="opacity-100 transform translate-y-0"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="opacity-100 transform translate-y-0"
+                             x-transition:leave-end="opacity-0 transform -translate-y-2"
+                             class="p-4 bg-gray-50 border-t">
+                            <p class="text-gray-600">
+                                1. Добавьте товары в корзину<br>
+                                2. Перейдите в корзину и нажмите "Оформить заказ"<br>
+                                3. Заполните контактные данные и адрес доставки<br>
+                                4. Подтвердите заказ
+                            </p>
+                        </div>
+                    </div>
+            
+                    <div x-data="{ open: false }" class="border rounded-lg overflow-hidden">
+                        <button @click="open = !open" 
+                                class="w-full flex items-center justify-between p-4 bg-white hover:bg-gray-50">
+                            <span class="font-medium">Какие способы оплаты доступны?</span>
+                            <svg class="w-5 h-5 transform transition-transform duration-200" 
+                                 :class="{ '-rotate-180': open }"
+                                 fill="none" 
+                                 stroke="currentColor" 
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div x-show="open"
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 transform -translate-y-2"
+                             x-transition:enter-end="opacity-100 transform translate-y-0"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="opacity-100 transform translate-y-0"
+                             x-transition:leave-end="opacity-0 transform -translate-y-2"
+                             class="p-4 bg-gray-50 border-t">
+                            <p class="text-gray-600">
+                                Мы принимаем оплату наличными при получении и банковскими картами через безопасную систему онлайн-платежей.
+                            </p>
+                        </div>
+                    </div>
+            
+                    <div x-data="{ open: false }" class="border rounded-lg overflow-hidden">
+                        <button @click="open = !open" 
+                                class="w-full flex items-center justify-between p-4 bg-white hover:bg-gray-50">
+                            <span class="font-medium">Как долго займет доставка?</span>
+                            <svg class="w-5 h-5 transform transition-transform duration-200" 
+                                 :class="{ '-rotate-180': open }"
+                                 fill="none" 
+                                 stroke="currentColor" 
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div x-show="open"
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 transform -translate-y-2"
+                             x-transition:enter-end="opacity-100 transform translate-y-0"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="opacity-100 transform translate-y-0"
+                             x-transition:leave-end="opacity-0 transform -translate-y-2"
+                             class="p-4 bg-gray-50 border-t">
+                            <p class="text-gray-600">
+                                Стандартная доставка по Кишинёву занимает 1-2 рабочих дня. Доставка в другие города Молдовы - 2-4 рабочих дня.
+                            </p>
+                        </div>
+                    </div>
+            
+                    <div x-data="{ open: false }" class="border rounded-lg overflow-hidden">
+                        <button @click="open = !open" 
+                                class="w-full flex items-center justify-between p-4 bg-white hover:bg-gray-50">
+                            <span class="font-medium">Возможен ли возврат товара?</span>
+                            <svg class="w-5 h-5 transform transition-transform duration-200" 
+                                 :class="{ '-rotate-180': open }"
+                                 fill="none" 
+                                 stroke="currentColor" 
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div x-show="open"
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 transform -translate-y-2"
+                             x-transition:enter-end="opacity-100 transform translate-y-0"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="opacity-100 transform translate-y-0"
+                             x-transition:leave-end="opacity-0 transform -translate-y-2"
+                             class="p-4 bg-gray-50 border-t">
+                            <p class="text-gray-600">
+                                Да, возврат возможен в течение 14 дней с момента получения товара, при условии сохранения его товарного вида и потребительских свойств.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </x-app-layout>
