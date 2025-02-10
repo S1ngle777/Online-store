@@ -94,26 +94,65 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|max:255',
-            'description' => 'required',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
+        try {
+            \DB::beginTransaction();
 
-        $validated['slug'] = Str::slug($validated['name']);
+            // Move has_sizes processing before validation
+            $has_sizes = $request->has('has_sizes');
 
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
-            $validated['image'] = $path;
+            $validated = $request->validate([
+                'name' => 'required|max:255',
+                'description' => 'required',
+                'price' => 'required|numeric|min:0',
+                'stock' => 'required|integer|min:0',
+                'category_id' => 'required|exists:categories,id',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'discount' => 'nullable|numeric|min:0|max:100',
+                'discount_ends_at' => 'nullable|date'
+            ]);
+
+            // Add has_sizes to validated data
+            $validated['has_sizes'] = $has_sizes;
+            $validated['slug'] = Str::slug($validated['name']);
+
+            if ($request->hasFile('image')) {
+                $validated['image'] = $request->file('image')->store('products', 'public');
+            }
+
+            // Create product
+            $product = Product::create($validated);
+
+            // Handle sizes if enabled
+            if ($has_sizes) {
+                $sizes = $request->input('sizes', []);
+                $stocks = $request->input('size_stocks', []);
+                
+                // Prepare sizes data with stocks
+                $sizesData = [];
+                foreach ($sizes as $sizeId) {
+                    if (isset($stocks[$sizeId])) {
+                        $sizesData[$sizeId] = ['stock' => $stocks[$sizeId]];
+                    }
+                }
+                
+                // Sync sizes with their stocks
+                $product->sizes()->sync($sizesData);
+                
+                // Update total stock as sum of all size stocks
+                $product->update([
+                    'stock' => array_sum(array_values($stocks))
+                ]);
+            }
+
+            \DB::commit();
+            return redirect()->route('products.index')->with('success', 'Товар успешно создан');
+
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            return back()
+                ->withInput()
+                ->with('error', 'Произошла ошибка при создании товара: ' . $e->getMessage());
         }
-
-        Product::create($validated);
-
-        return redirect()->route('products.index')
-            ->with('success', 'Product created successfully.');
     }
 
     public function edit(Product $product)
@@ -124,41 +163,74 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        $validated = $request->validate([
-            'name' => 'required|max:255',
-            'description' => 'required',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'discount' => 'nullable|numeric|min:0|max:100',
-            'discount_ends_at' => 'nullable|date',
-        ]);
+        try {
+            \DB::beginTransaction();
 
-        $validated['slug'] = Str::slug($validated['name']);
+            $validated = $request->validate([
+                'name' => 'required|max:255',
+                'description' => 'required',
+                'price' => 'required|numeric|min:0',
+                'stock' => 'required|integer|min:0',
+                'category_id' => 'required|exists:categories,id',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'discount' => 'nullable|numeric|min:0|max:100',
+                'discount_ends_at' => 'nullable|date',
+            ]);
 
-        if ($request->hasFile('image')) {
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
+            $validated['has_sizes'] = $request->has('has_sizes'); // Explicitly set boolean value
+            $validated['slug'] = Str::slug($validated['name']);
+
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                if ($product->image) {
+                    Storage::disk('public')->delete($product->image);
+                }
+                $validated['image'] = $request->file('image')->store('products', 'public');
             }
-            $validated['image'] = $request->file('image')->store('products', 'public');
+
+            // Process discount
+            if (!isset($validated['discount'])) {
+                $validated['discount'] = null;
+                $validated['discount_ends_at'] = null;
+            }
+
+            // Update product basic info
+            $product->update($validated);
+
+            // Handle sizes if enabled
+            if ($validated['has_sizes']) {
+                $sizesData = [];
+                $sizes = $request->input('sizes', []);
+                $sizeStocks = $request->input('size_stocks', []);
+                
+                foreach ($sizes as $sizeId) {
+                    if (isset($sizeStocks[$sizeId])) {
+                        $sizesData[$sizeId] = ['stock' => $sizeStocks[$sizeId]];
+                    }
+                }
+                
+                // Sync sizes with their stocks
+                $product->sizes()->sync($sizesData);
+                
+                // Update total stock as sum of all size stocks
+                $product->update([
+                    'stock' => array_sum($sizesData ? array_column($sizesData, 'stock') : [0])
+                ]);
+            } else {
+                // Remove all size relationships if has_sizes is false
+                $product->sizes()->detach();
+            }
+
+            \DB::commit();
+            return redirect()->route('products.index')
+                ->with('success', 'Товар успешно обновлен');
+
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            return back()
+                ->withInput()
+                ->with('error', 'Произошла ошибка при обновлении товара: ' . $e->getMessage());
         }
-
-        // Обработка скидки
-        if (!isset($validated['discount'])) {
-            $validated['discount'] = 0;
-            $validated['discount_ends_at'] = null;
-        } else {
-            $validated['discount'] = floatval($validated['discount']);
-            $validated['discount_ends_at'] = $request->filled('discount_ends_at') 
-                ? Carbon::parse($request->discount_ends_at)
-                : null;
-        }
-
-        $product->update($validated);
-
-        return redirect()->route('products.index')
-            ->with('success', 'Товар успешно обновлен');
     }
 
     public function destroy(Product $product)
@@ -168,8 +240,8 @@ class ProductController extends Controller
         }
         
         $product->delete();
-
+        
         return redirect()->route('products.index')
-            ->with('success', 'Product deleted successfully.');
+            ->with('success', 'Товар успешно удален');
     }
 }

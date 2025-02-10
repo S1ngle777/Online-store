@@ -176,10 +176,17 @@
                                         @endif
                                     </div>
                                     @auth
-                                        <form action="{{ route('cart.add', $product) }}" method="POST">
-                                            @csrf
-                                            <x-primary-button>В корзину</x-primary-button>
-                                        </form>
+                                        @if($product->has_sizes)
+                                            <a href="{{ route('products.show', $product) }}" 
+                                               class="inline-flex items-center px-4 py-2 bg-primary hover:bg-primary-dark border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest transition ease-in-out duration-150">
+                                                Выбрать размер
+                                            </a>
+                                        @else
+                                            <form action="{{ route('cart.add', $product) }}" method="POST">
+                                                @csrf
+                                                <x-primary-button>В корзину</x-primary-button>
+                                            </form>
+                                        @endif
                                     @endauth
                                 </div>
                                 @auth

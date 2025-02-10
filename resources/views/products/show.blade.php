@@ -79,37 +79,87 @@
                             @auth
                                 <form action="{{ route('cart.add', $product) }}" method="POST" class="mt-6">
                                     @csrf
-                                    <div class="flex items-center gap-4">
-                                        <div class="flex items-center border border-gray-300 rounded-md">
-                                            <button type="button" 
-                                                    class="px-3 py-3 text-gray-600 hover:text-gray-700 hover:bg-gray-100 rounded-l-md"
-                                                    onclick="decrementQuantity()">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
-                                                </svg>
-                                            </button>
-                                            
-                                            <input type="number" 
-                                                   name="quantity" 
-                                                   id="quantity"
-                                                   value="1" 
-                                                   min="1" 
-                                                   max="{{ $product->stock }}"
-                                                   class="w-12 py-2 text-center border-0 focus:outline-none focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" >
-                                            
-                                            <button type="button"
-                                                    class="px-3 py-3 text-gray-600 hover:text-gray-700 hover:bg-gray-100 rounded-r-md"
-                                                    onclick="incrementQuantity()">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                                                </svg>
-                                            </button>
+                                    <div class="flex flex-col gap-4">
+                                        @if($product->has_sizes)
+                                            <div>
+                                                <label for="size" class="block text-sm font-medium text-gray-700 mb-2">Выберите размер:</label>
+                                                <div class="flex flex-wrap gap-2">
+                                                    @foreach($product->sizes as $size)
+                                                        <label class="relative">
+                                                            <input type="radio" 
+                                                                   name="size" 
+                                                                   value="{{ $size->id }}"
+                                                                   {{ $size->pivot->stock <= 0 ? 'disabled' : '' }}
+                                                                   class="peer absolute opacity-0 w-full h-full cursor-pointer"
+                                                                   required>
+                                                            <span class="block min-w-[3rem] text-center py-2 px-3 border rounded-md 
+                                                                       {{ $size->pivot->stock <= 0 
+                                                                           ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200' 
+                                                                           : 'peer-checked:border-primary peer-checked:bg-primary peer-checked:text-white hover:border-primary cursor-pointer' }}
+                                                                       transition-colors">
+                                                                {{ $size->name }}
+                                                            </span>
+                                                            @if($size->pivot->stock > 0)
+                                                                <span class="absolute -top-2 -right-2 bg-gray-500 text-white text-xs px-1 rounded-full">
+                                                                    {{ $size->pivot->stock }} шт
+                                                                </span>
+                                                            @endif
+                                                        </label>
+                                                    @endforeach
+                                                </div>
+                                                @error('size')
+                                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+                                        @endif
+                                        
+                                        <div class="flex items-center gap-4">
+                                            <div class="flex items-center border border-gray-300 rounded-md">
+                                                <button type="button" 
+                                                        class="px-3 py-3 text-gray-600 hover:text-gray-700 hover:bg-gray-100 rounded-l-md"
+                                                        onclick="decrementQuantity()">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+                                                    </svg>
+                                                </button>
+                                                
+                                                <input type="number" 
+                                                       id="quantity" 
+                                                       name="quantity" 
+                                                       value="1" 
+                                                       min="1" 
+                                                       max="{{ $product->has_sizes ? ($size->pivot->stock ?? 0) : $product->stock }}"
+                                                       class="w-14 py-2 text-right border-0 focus:outline-none focus:ring-0 focus:border-gray-300"
+                                                       readonly>
+                                                
+                                                <button type="button"
+                                                        class="px-3 py-3 text-gray-600 hover:text-gray-700 hover:bg-gray-100 rounded-r-md"
+                                                        onclick="incrementQuantity()">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <x-primary-button>Добавить в корзину</x-primary-button>
                                         </div>
-                                        <x-primary-button>Добавить в корзину</x-primary-button>
                                     </div>
                                 </form>
 
                                 <script>
+                                    // Add this to update max quantity when size is selected
+                                    document.querySelectorAll('input[name="size"]').forEach(radio => {
+                                        radio.addEventListener('change', function() {
+                                            const stockSpan = this.closest('label').querySelector('span[class*="bg-gray-500"]');
+                                            const stock = stockSpan ? parseInt(stockSpan.textContent) : 0;
+                                            document.getElementById('quantity').setAttribute('max', stock);
+                                            // Reset quantity if it's more than available stock
+                                            const quantityInput = document.getElementById('quantity');
+                                            if (parseInt(quantityInput.value) > stock) {
+                                                quantityInput.value = stock;
+                                            }
+                                        });
+                                    });
+
                                     function incrementQuantity() {
                                         const input = document.getElementById('quantity');
                                         const maxValue = parseInt(input.getAttribute('max'));

@@ -83,6 +83,45 @@
                             <x-input-error :messages="$errors->get('discount_ends_at')" class="mt-2" />
                         </div>
 
+                        <!-- Чекбокс для включения размеров -->
+                        <div class="mt-4">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" 
+                                       name="has_sizes" 
+                                       class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                       {{ $product->has_sizes ? 'checked' : '' }}
+                                       onchange="document.getElementById('sizes-input').style.display = this.checked ? 'block' : 'none'">
+                                <span class="ml-2 text-sm text-gray-600">Товар имеет разные размеры</span>
+                            </label>
+                        </div>
+
+                        <!-- Секция размеров -->
+                        <div id="sizes-input" class="mt-4" style="display: {{ $product->has_sizes ? 'block' : 'none' }}">
+                            <x-input-label value="Размеры и количество" class="mb-3"/>
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                @foreach(App\Models\Size::where('type', 'clothing')->get() as $size)
+                                    <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-indigo-500 transition-colors {{ $product->sizes->contains($size->id) ? 'border-indigo-500 ring-2 ring-indigo-500/20' : '' }}">
+                                        <label class="flex items-start">
+                                            <input type="checkbox" 
+                                                   name="sizes[]" 
+                                                   value="{{ $size->id }}"
+                                                   {{ $product->sizes->contains($size->id) ? 'checked' : '' }}
+                                                   class="rounded border-gray-300 text-indigo-600 mt-1">
+                                            <div class="ml-3 flex-1">
+                                                <span class="block font-medium text-gray-700">{{ $size->name }}</span>
+                                                <input type="number" 
+                                                       name="size_stocks[{{ $size->id }}]"
+                                                       value="{{ $product->getSizeStock($size->id) }}"
+                                                       min="0"
+                                                       class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                                                       placeholder="Количество">
+                                            </div>
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
                         <div class="flex items-center justify-end mt-4">
                             <x-primary-button class="ml-4">
                                 {{ __('Изменить товар') }}

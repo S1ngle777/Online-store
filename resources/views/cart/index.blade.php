@@ -37,18 +37,18 @@
                                             </div>
                                             <div class="flex flex-1 items-end justify-between text-sm">
                                                 <p class="text-gray-500">
-                                                    Кл-во {{ $item['quantity'] }} 
-                                                    @if(isset($item['original_price']) && $item['original_price'] > $item['price'])
-                                                        <span class="text-green-600 ml-2">
-                                                            -{{ number_format((1 - $item['price'] / $item['original_price']) * 100, 0) }}%
-                                                        </span>
+                                                    Кл-во {{ $item['quantity'] }}
+                                                    @if(isset($item['size_name']))
+                                                        <span class="ml-2">Размер: {{ $item['size_name'] }}</span>
                                                     @endif
                                                 </p>
                                                 <form action="{{ route('cart.remove', $id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit"
-                                                        class="text-red-600 hover:text-red-500">Убрать</button>
+                                                    <button type="submit" 
+                                                            class="text-red-600 hover:text-red-500 font-medium">
+                                                        Убрать
+                                                    </button>
                                                 </form>
                                             </div>
                                         </div>

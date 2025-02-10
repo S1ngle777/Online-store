@@ -37,6 +37,41 @@
                         </div>
 
                         <div class="mt-4">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" 
+                                       name="has_sizes" 
+                                       class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                       onchange="document.getElementById('sizes-input').style.display = this.checked ? 'block' : 'none'">
+                                <span class="ml-2 text-sm text-gray-600">Товар имеет разные размеры</span>
+                            </label>
+                        </div>
+
+                        <div id="sizes-input" class="mt-4" style="display: none">
+                            <x-input-label value="Размеры и количество" class="mb-3"/>
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                @foreach(App\Models\Size::where('type', 'clothing')->get() as $size)
+                                    <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-indigo-500 transition-colors">
+                                        <label class="flex items-start">
+                                            <input type="checkbox" 
+                                                   name="sizes[]" 
+                                                   value="{{ $size->id }}"
+                                                   class="rounded border-gray-300 text-indigo-600 mt-1">
+                                            <div class="ml-3 flex-1">
+                                                <span class="block font-medium text-gray-700">{{ $size->name }}</span>
+                                                <input type="number" 
+                                                       name="size_stocks[{{ $size->id }}]"
+                                                       value="0"
+                                                       min="0"
+                                                       class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                                                       placeholder="Количество">
+                                            </div>
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
                             <x-input-label for="category_id" :value="__('Категория')" />
                             <select id="category_id" name="category_id" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                                 @foreach ($categories as $category)

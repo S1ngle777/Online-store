@@ -90,10 +90,23 @@
                                     <div class="flex justify-between items-center border-b pb-4">
                                         <div>
                                             <h4 class="font-medium">{{ $item->product->name }}</h4>
-                                            <p class="text-sm text-gray-600">{{ $item->quantity }} x
-                                                {{ $item->price }} MDL</p>
+                                            <p class="text-sm text-gray-600">
+                                                {{ $item->quantity }} x {{ $item->price }} MDL
+                                                @if($item->product->has_sizes)
+                                                    @php
+                                                        $cartKey = $item->product_id . '-' . $item->size_id;
+                                                        $cartItem = session()->get('cart.' . $cartKey);
+                                                        $size = App\Models\Size::find($item->size_id);
+                                                    @endphp
+                                                    @if($size)
+                                                        <span class="ml-2">Размер: {{ $size->name }}</span>
+                                                    @endif
+                                                @endif
+                                            </p>
                                         </div>
-                                        <p class="font-medium">{{ $item->quantity * $item->price }} MDL</p>
+                                        <div>
+                                            <p class="font-medium">{{ $item->quantity * $item->price }} MDL</p>
+                                        </div>
                                     </div>
                                 @endforeach
                             </div>

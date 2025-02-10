@@ -17,11 +17,13 @@ class Product extends Model
         'category_id',
         'image',
         'discount',
-        'discount_ends_at'
+        'discount_ends_at',
+        'has_sizes'
     ];
 
     protected $casts = [
-        'discount_ends_at' => 'datetime'
+        'discount_ends_at' => 'datetime',
+        'has_sizes' => 'boolean'
     ];
 
     public function category()
@@ -55,5 +57,18 @@ class Product extends Model
     public function hasActiveDiscount()
     {
         return $this->discount > 0 && ($this->discount_ends_at === null || $this->discount_ends_at->isFuture());
+    }
+
+    public function sizes()
+    {
+        return $this->belongsToMany(Size::class, 'product_sizes')
+                    ->withPivot('stock')
+                    ->withTimestamps();
+    }
+
+    public function getSizeStock($sizeId)
+    {
+        $size = $this->sizes()->where('size_id', $sizeId)->first();
+        return $size ? $size->pivot->stock : 0;
     }
 }
