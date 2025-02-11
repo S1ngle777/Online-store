@@ -6,6 +6,7 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\DeliveryMethod;
 use Illuminate\Http\Request;
+use App\Notifications\OrderCreated;
 
 class OrderController extends Controller
 {
@@ -146,11 +147,14 @@ class OrderController extends Controller
                 ]);
             }
 
+            // Send notification
+            $order->notify(new OrderCreated($order));
+
             \DB::commit();
             session()->forget('cart');
 
             return redirect()->route('orders.success', $order)
-                ->with('success', 'Заказ успешно оформлен!');
+                ->with('success', 'Заказ успешно оформлен! Проверьте вашу почту.');
 
         } catch (\Exception $e) {
             \DB::rollBack();

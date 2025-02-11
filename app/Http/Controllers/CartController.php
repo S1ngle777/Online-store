@@ -45,7 +45,10 @@ class CartController extends Controller
         $cart = session()->get('cart', []);
         $cartKey = $product->has_sizes ? $product->id . '-' . $sizeId : $product->id;
 
-        // Check size stock
+        // Initialize size variable
+        $size = null;
+
+        // Check stock and get size info if product has sizes
         if ($product->has_sizes) {
             $size = Size::find($sizeId);
             if (!$size) {
@@ -59,6 +62,12 @@ class CartController extends Controller
                 return redirect()->back()
                     ->with('error', "Недостаточно товара выбранного размера. Доступно: {$sizeStock} шт.");
             }
+        } else {
+            // Check regular product stock
+            if ($product->stock < $quantity) {
+                return redirect()->back()
+                    ->with('error', "Недостаточно товара на складе. Доступно: {$product->stock} шт.");
+            }
         }
 
         if (isset($cart[$cartKey])) {
@@ -69,8 +78,8 @@ class CartController extends Controller
                 'price' => $product->hasActiveDiscount() ? $product->discounted_price : $product->price,
                 'quantity' => $quantity,
                 'image' => $product->image,
-                'size_id' => $sizeId,
-                'size_name' => $size ? $size->name : null
+                'size_id' => $product->has_sizes ? $sizeId : null,
+                'size_name' => $product->has_sizes ? $size->name : null
             ];
         }
 
