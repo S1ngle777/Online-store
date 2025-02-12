@@ -5,6 +5,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\DeliveryMethod;
+use App\Notifications\OrderCompleted;
 use Illuminate\Http\Request;
 use App\Notifications\OrderCreated;
 
@@ -194,39 +195,33 @@ class OrderController extends Controller
             $oldStatus = $order->status;
             $newStatus = $validated['status'];
 
-            // If order is being cancelled, restore stock
+            // Если заказ отменяется, возвращаем товары на склад
             if ($newStatus === 'cancelled' && $oldStatus !== 'cancelled') {
                 foreach ($order->items as $item) {
                     $product = Product::find($item->product_id);
                     if ($product) {
                         if ($product->has_sizes && $item->size_id) {
-                            // Restore size-specific stock
                             $product->sizes()->updateExistingPivot($item->size_id, [
                                 'stock' => \DB::raw('stock + ' . $item->quantity)
                             ]);
-                            // Restore total product stock
                             $product->increment('stock', $item->quantity);
                         } else {
-                            // Restore general product stock
                             $product->increment('stock', $item->quantity);
                         }
                     }
                 }
             }
-            // If cancelled order is being restored, decrease stock again
+            // Если отмененный заказ восстанавливается
             elseif ($oldStatus === 'cancelled' && $newStatus !== 'cancelled') {
                 foreach ($order->items as $item) {
                     $product = Product::find($item->product_id);
                     if ($product) {
                         if ($product->has_sizes && $item->size_id) {
-                            // Decrease size-specific stock
                             $product->sizes()->updateExistingPivot($item->size_id, [
                                 'stock' => \DB::raw('stock - ' . $item->quantity)
                             ]);
-                            // Decrease total product stock
                             $product->decrement('stock', $item->quantity);
                         } else {
-                            // Decrease general product stock
                             $product->decrement('stock', $item->quantity);
                         }
                     }
@@ -234,6 +229,12 @@ class OrderController extends Controller
             }
 
             $order->update(['status' => $newStatus]);
+
+            // Отправляем уведомление при завершении заказа
+            if ($newStatus === 'completed' && $oldStatus !== 'completed') {
+                $order->notify(new OrderCompleted($order));
+            }
+
             \DB::commit();
 
             return redirect()->back()->with('success', 'Статус заказа обновлен');
