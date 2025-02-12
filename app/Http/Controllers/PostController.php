@@ -11,9 +11,17 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::where('is_published', true)
-            ->orderBy('published_at', 'desc')
-            ->paginate(6);
+        if (auth()->user()?->isAdmin()) {
+            // Для админа показываем все посты
+            $posts = Post::orderBy('published_at', 'desc')
+                        ->orderBy('created_at', 'desc')
+                        ->paginate(6);
+        } else {
+            // Для остальных только опубликованные
+            $posts = Post::where('is_published', true)
+                        ->orderBy('published_at', 'desc')
+                        ->paginate(6);
+        }
         return view('blog.index', compact('posts'));
     }
 
@@ -64,20 +72,39 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         $validated = $request->validate([
-            'title' => 'required|max:255',
-            'content' => 'required',
-            'image' => 'nullable|image|max:2048',
-            'is_published' => 'boolean'
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'is_published' => 'nullable|boolean'
         ]);
 
+        // Handle published status and date
+        $isNowPublished = $request->boolean('is_published');
+        $wasPublished = $post->is_published;
+
+        if ($isNowPublished && !$wasPublished) {
+            // If publishing for the first time
+            $post->published_at = now();
+        } elseif (!$isNowPublished && $wasPublished) {
+            // If unpublishing
+            $post->published_at = null;
+        }
+        // If no change in published status, keep existing published_at
+
+        $post->is_published = $isNowPublished;
+
+        // Handle image upload
         if ($request->hasFile('image')) {
             if ($post->image) {
                 Storage::disk('public')->delete($post->image);
             }
             $validated['image'] = $request->file('image')->store('posts', 'public');
+            $post->image = $validated['image'];
         }
 
-        $post->update($validated);
+        $post->title = $validated['title'];
+        $post->content = $validated['content'];
+        $post->save();
 
         return redirect()->route('blog.show', $post)
             ->with('success', 'Пост успешно обновлен');

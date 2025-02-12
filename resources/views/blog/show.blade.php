@@ -38,9 +38,21 @@
 
                     <!-- Мета-информация -->
                     <div class="flex items-center text-gray-500 text-sm mb-6">
-                        <span>{{ $post->published_at->format('d.m.Y') }}</span>
+                        <span>
+                            @if($post->is_published && $post->published_at)
+                                {{ $post->published_at->format('d.m.Y') }}
+                            @else
+                                Создан: {{ $post->created_at->format('d.m.Y') }}
+                            @endif
+                        </span>
                         <span class="mx-2">•</span>
                         <span>{{ $post->user->name }}</span>
+                        @if(auth()->user()?->isAdmin())
+                            <span class="mx-2">•</span>
+                            <span class="text-yellow-600">
+                                {{ $post->is_published ? 'Опубликован' : 'Черновик' }}
+                            </span>
+                        @endif
                     </div>
 
                     <!-- Содержимое -->
