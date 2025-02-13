@@ -61,24 +61,4 @@ class ReviewController extends Controller
         return back()->with('success', 'Ответ добавлен');
     }
 
-    public function index(Request $request, Product $product)
-    {
-        $reviews = $product->reviews()
-            ->with(['user', 'votes'])
-            ->when($request->sort === 'rating_desc', function ($query) {
-                $query->orderBy('rating', 'desc');
-            })
-            ->when($request->sort === 'rating_asc', function ($query) {
-                $query->orderBy('rating', 'asc');
-            })
-            ->when($request->sort === 'date_desc', function ($query) {
-                $query->latest();
-            })
-            ->when($request->sort === 'date_asc', function ($query) {
-                $query->oldest();
-            })
-            ->paginate(10);
-
-        return view('products.reviews', compact('product', 'reviews'));
-    }
 }

@@ -5,18 +5,18 @@
             if (!selectedDelivery) return;
             
             const deliveryPrice = parseFloat(selectedDelivery.dataset.price) || 0;
-            const subtotal = {{ $totalPrice }}; // Original items total
+            const subtotal = {{ $totalPrice }};
             const total = subtotal + deliveryPrice;
             
-            // Update delivery cost display
+            // Обновление отображения стоимости доставки
             document.getElementById('delivery-cost').textContent = 
                 deliveryPrice.toFixed(2) + ' MDL';
             
-            // Update total amount display
+            // Итого к оплате
             document.getElementById('total-amount').textContent = 
                 total.toFixed(2) + ' MDL';
                 
-            // Update hidden input for form submission
+            // Обновление скрытого поля для отправки формы
             document.getElementById('total_amount').value = total;
         }
 

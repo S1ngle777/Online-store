@@ -26,7 +26,7 @@
                 <ul class="space-y-2 text-gray-600">
                     <li>📍 Кишинёв, Молдова</li>
                     <li>📞 +373 77 777 777</li>
-                    <li>✉️ info@moldavianhandmade.md</li>
+                    <li>✉️ info@handmade.md</li>
                 </ul>
             </div>
 
@@ -48,10 +48,10 @@
             </div>
         </div>
 
-        <div class="mt-8 pt-8 border-t border-gray-200">
+        {{-- <div class="mt-8 pt-8 border-t border-gray-200">
             <p class="text-center text-gray-500 text-sm">
                 © {{ date('Y') }} Молдавские изделия ручной работы. Все права защищены.
             </p>
-        </div>
+        </div> --}}
     </div>
 </footer>

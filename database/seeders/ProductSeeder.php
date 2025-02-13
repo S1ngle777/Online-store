@@ -26,7 +26,6 @@ class ProductSeeder extends Seeder
                 'created_at' => '2024-12-04 15:07:33',
                 'updated_at' => '2024-12-04 17:41:47'
             ],
-            // Add all other products here...
 
             [
                 'id' => 3,

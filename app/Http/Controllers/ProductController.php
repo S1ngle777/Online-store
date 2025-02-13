@@ -97,7 +97,6 @@ class ProductController extends Controller
         try {
             \DB::beginTransaction();
 
-            // Move has_sizes processing before validation
             $has_sizes = $request->has('has_sizes');
 
             $validated = $request->validate([
@@ -111,7 +110,7 @@ class ProductController extends Controller
                 'discount_ends_at' => 'nullable|date'
             ]);
 
-            // Add has_sizes to validated data
+            // Добавить has_sizes к проверенным данным
             $validated['has_sizes'] = $has_sizes;
             $validated['slug'] = Str::slug($validated['name']);
 
@@ -119,15 +118,15 @@ class ProductController extends Controller
                 $validated['image'] = $request->file('image')->store('products', 'public');
             }
 
-            // Create product
+            // Создать продукт
             $product = Product::create($validated);
 
-            // Handle sizes if enabled
+            // Обработать размеры, если включено
             if ($has_sizes) {
                 $sizes = $request->input('sizes', []);
                 $stocks = $request->input('size_stocks', []);
                 
-                // Prepare sizes data with stocks
+                // Подготовить данные размеров с запасами
                 $sizesData = [];
                 foreach ($sizes as $sizeId) {
                     if (isset($stocks[$sizeId])) {
@@ -135,10 +134,10 @@ class ProductController extends Controller
                     }
                 }
                 
-                // Sync sizes with their stocks
+                // Синхронизировать размеры с их запасами
                 $product->sizes()->sync($sizesData);
                 
-                // Update total stock as sum of all size stocks
+                // Обновить общую запас как сумму всех запасов по размерам
                 $product->update([
                     'stock' => array_sum(array_values($stocks))
                 ]);
@@ -177,10 +176,10 @@ class ProductController extends Controller
                 'discount_ends_at' => 'nullable|date',
             ]);
 
-            $validated['has_sizes'] = $request->has('has_sizes'); // Explicitly set boolean value
+            $validated['has_sizes'] = $request->has('has_sizes'); 
             $validated['slug'] = Str::slug($validated['name']);
 
-            // Handle image upload
+            // Обработка загрузки изображения
             if ($request->hasFile('image')) {
                 if ($product->image) {
                     Storage::disk('public')->delete($product->image);
@@ -188,16 +187,16 @@ class ProductController extends Controller
                 $validated['image'] = $request->file('image')->store('products', 'public');
             }
 
-            // Process discount
+            // Обработка скидки
             if (!isset($validated['discount'])) {
                 $validated['discount'] = null;
                 $validated['discount_ends_at'] = null;
             }
 
-            // Update product basic info
+            // Обновить основную информацию о товаре
             $product->update($validated);
 
-            // Handle sizes if enabled
+            // Обработать размеры, если включено
             if ($validated['has_sizes']) {
                 $sizesData = [];
                 $sizes = $request->input('sizes', []);
@@ -209,15 +208,15 @@ class ProductController extends Controller
                     }
                 }
                 
-                // Sync sizes with their stocks
+                // Синхронизировать размеры с их запасами
                 $product->sizes()->sync($sizesData);
                 
-                // Update total stock as sum of all size stocks
+                // Обновить общую запас как сумму всех запасов по размерам
                 $product->update([
                     'stock' => array_sum($sizesData ? array_column($sizesData, 'stock') : [0])
                 ]);
             } else {
-                // Remove all size relationships if has_sizes is false
+                // Удалить все связи по размерам, если has_sizes равно false
                 $product->sizes()->detach();
             }
 

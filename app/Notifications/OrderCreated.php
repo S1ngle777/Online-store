@@ -40,7 +40,7 @@ class OrderCreated extends Notification
             ->action('Посмотреть заказ', $url)
             ->line('Мы начали обработку вашего заказа и свяжемся с вами в ближайшее время.')
             ->line('Если у вас возникли вопросы, пожалуйста, свяжитесь с нами.')
-            ->salutation('С уважением, Команда MoldavianHandmade');
+            ->salutation('С уважением, команда Handmade.md');
     }
 
     public function toArray(object $notifiable): array

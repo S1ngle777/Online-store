@@ -15,7 +15,7 @@ class CartController extends Controller
         $totalOriginalPrice = 0;
         
         foreach ($cartItems as $id => &$item) {
-            // Parse product ID from cart key (handles both normal products and products with sizes)
+            // Парсинг ID товара из ключа корзины (обрабатывает как обычные товары, так и товары с размерами)
             $productId = explode('-', $id)[0];
             $product = Product::find($productId);
             
@@ -45,10 +45,9 @@ class CartController extends Controller
         $cart = session()->get('cart', []);
         $cartKey = $product->has_sizes ? $product->id . '-' . $sizeId : $product->id;
 
-        // Initialize size variable
         $size = null;
 
-        // Check stock and get size info if product has sizes
+        // Проверька наличия товара и получение информации о размере, если у товара есть размеры
         if ($product->has_sizes) {
             $size = Size::find($sizeId);
             if (!$size) {
@@ -63,7 +62,7 @@ class CartController extends Controller
                     ->with('error', "Недостаточно товара выбранного размера. Доступно: {$sizeStock} шт.");
             }
         } else {
-            // Check regular product stock
+            // Проверка регулярного запаса товара
             if ($product->stock < $quantity) {
                 return redirect()->back()
                     ->with('error', "Недостаточно товара на складе. Доступно: {$product->stock} шт.");

@@ -18,9 +18,9 @@ class OrderController extends Controller
         $totalOriginalPrice = 0;
         $deliveryMethods = DeliveryMethod::where('is_active', true)->get();
 
-        // Update prices for all items in cart
+        // Обновление цен для всех товаров в корзине
         foreach ($cartItems as $id => &$item) {
-            // Parse product ID from cart key (for products with sizes, the key is in format "productId-sizeId")
+            // Извлечь ID продукта из ключа корзины (для продуктов с размерами ключ имеет формат "productId-sizeId")
             $productId = explode('-', $id)[0];
             $product = Product::find($productId);
 
@@ -75,17 +75,17 @@ class OrderController extends Controller
                 throw new \Exception('Корзина пуста');
             }
 
-            // Calculate subtotal before creating order
+            // Подсчет промежуточной суммы перед созданием заказа 
             $subtotal = 0;
             foreach ($cartItems as $cartKey => $item) {
                 $subtotal += $item['price'] * $item['quantity'];
             }
 
-            // Get delivery method and add its cost to total
+            // Получить способ доставки и добавить его стоимость к общей сумме
             $deliveryMethod = DeliveryMethod::findOrFail($validated['delivery_method_id']);
             $totalAmount = $subtotal + $deliveryMethod->price;
 
-            // Create order with total amount
+            // Создать заказ с общей суммой
             $order = Order::create([
                 'user_id' => auth()->id(),
                 'name' => $validated['name'],
@@ -96,10 +96,10 @@ class OrderController extends Controller
                 'status' => 'pending',
                 'delivery_method_id' => $deliveryMethod->id,
                 'payment_method' => $validated['payment_method'],
-                'total_amount' => $totalAmount // Add this line
+                'total_amount' => $totalAmount
             ]);
 
-            // Process cart items...
+            // Обработка товаров в корзине
             foreach ($cartItems as $cartKey => $item) {
                 $parts = explode('-', $cartKey);
                 $productId = $parts[0];
@@ -107,11 +107,11 @@ class OrderController extends Controller
 
                 $product = Product::findOrFail($productId);
 
-                // Check stock...
+                // Проверка наличия на складе...
                 if ($product->has_sizes) {
                     $sizeStock = $product->getSizeStock($sizeId);
                     if ($sizeStock < $item['quantity']) {
-                        throw new \Exception("Недостаточно товара {$item['name']} выбранного размера на складе");
+                        throw new \Exception("Недостаточно выбранного размера товара {$item['name']} на складе");
                     }
                 } else {
                     if ($product->stock < $item['quantity']) {
@@ -119,36 +119,36 @@ class OrderController extends Controller
                     }
                 }
 
-                // Create order item with size
+                // Создать элемент заказа с размером
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $productId,
-                    'size_id' => $sizeId, // Add size_id
+                    'size_id' => $sizeId,
                     'quantity' => $item['quantity'],
                     'price' => $item['price']
                 ]);
 
-                // Update stock handling section
+                // Обновление раздела обработки запасов
                 if ($product->has_sizes) {
-                    // Update size-specific stock
+                    // Обновление запасов по размеру
                     $product->sizes()->updateExistingPivot($sizeId, [
                         'stock' => \DB::raw('stock - ' . $item['quantity'])
                     ]);
-                    // Update total product stock
+                    // Обновление общего запаса продукта
                     $product->decrement('stock', $item['quantity']);
                 } else {
                     $product->decrement('stock', $item['quantity']);
                 }
             }
 
-            // Save address if requested
+            // Сохранить адрес, если это необходимо
             if ($request->boolean('save_address')) {
                 auth()->user()->update([
                     'default_address' => $validated['address']
                 ]);
             }
 
-            // Send notification
+            // Отправка уведомления
             $order->notify(new OrderCreated($order));
 
             \DB::commit();
@@ -254,20 +254,20 @@ class OrderController extends Controller
         try {
             \DB::beginTransaction();
 
-            // If order is not cancelled, restore stock before deletion
+            // Если заказ не отменен, восстанавливаем запас перед удалением
             if ($order->status !== 'cancelled') {
                 foreach ($order->items as $item) {
                     $product = Product::find($item->product_id);
                     if ($product) {
                         if ($product->has_sizes && $item->size_id) {
-                            // Restore size-specific stock
+                            // Восстанавливаем размерный запас
                             $product->sizes()->updateExistingPivot($item->size_id, [
                                 'stock' => \DB::raw('stock + ' . $item->quantity)
                             ]);
-                            // Restore total product stock
+                            // Восстанавливаем общий запас товара
                             $product->increment('stock', $item->quantity);
                         } else {
-                            // Restore general product stock
+                            // Восстанавливаем общий запас товара
                             $product->increment('stock', $item->quantity);
                         }
                     }

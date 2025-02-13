@@ -78,22 +78,22 @@ class PostController extends Controller
             'is_published' => 'nullable|boolean'
         ]);
 
-        // Handle published status and date
+        // Обработка статуса публикации и даты публикации
         $isNowPublished = $request->boolean('is_published');
         $wasPublished = $post->is_published;
 
         if ($isNowPublished && !$wasPublished) {
-            // If publishing for the first time
+            // Если публикуется впервые
             $post->published_at = now();
         } elseif (!$isNowPublished && $wasPublished) {
-            // If unpublishing
+            // Если снимается с публикации
             $post->published_at = null;
         }
-        // If no change in published status, keep existing published_at
-
+        
+        // Если статус публикации не изменился, оставляем существующий published_at
         $post->is_published = $isNowPublished;
 
-        // Handle image upload
+        // Обработка загрузки изображения
         if ($request->hasFile('image')) {
             if ($post->image) {
                 Storage::disk('public')->delete($post->image);

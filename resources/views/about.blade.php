@@ -63,7 +63,7 @@
                             <div class="space-y-2 text-gray-600">
                                 <p>📍 Кишинёв, Молдова</p>
                                 <p>📞 +373 77 777 777</p>
-                                <p>✉️ info@moldavianhandmade.md</p>
+                                <p>✉️ info@handmade.md</p>
                             </div>
                         </div>
                     </div>

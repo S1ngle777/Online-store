@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // Add delivery_method_id to orders table
+        // Добавляем поле delivery_method_id в таблицу orders
         Schema::table('orders', function (Blueprint $table) {
             $table->foreignId('delivery_method_id')->nullable()->constrained();
             $table->string('payment_method')->nullable();
