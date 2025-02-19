@@ -53,4 +53,12 @@ return [
         'completed' => 'Finalizată',
         'cancelled' => 'Anulată',
     ],
+    'cart_empty' => 'Coșul este gol',
+    'insufficient_size_stock' => 'Stoc insuficient pentru produsul :product în mărimea selectată',
+    'insufficient_stock' => 'Stoc insuficient pentru produsul :product',
+    'order_placed_successfully' => 'Comanda a fost plasată cu succes! Verificați-vă emailul.',
+    'status_updated' => 'Starea comenzii a fost actualizată',
+    'status_update_error' => 'Eroare la actualizarea stării: :error',
+    'deleted_successfully' => 'Comanda a fost ștearsă cu succes',
+    'delete_error' => 'Eroare la ștergerea comenzii: :error',
 ];

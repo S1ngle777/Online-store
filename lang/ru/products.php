@@ -63,4 +63,9 @@ return [
     'out_of_five' => 'из 5',
     'reviews_count' => 'отзывов',
     'promotion_ends' => 'Акция действует до',
+    'created_successfully' => 'Товар успешно создан',
+    'updated_successfully' => 'Товар успешно обновлен',
+    'deleted_successfully' => 'Товар успешно удален',
+    'create_error' => 'Произошла ошибка при создании товара: :error',
+    'update_error' => 'Произошла ошибка при обновлении товара: :error',
 ];

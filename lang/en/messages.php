@@ -18,6 +18,8 @@ return [
     'search' => 'Search',
     'language' => 'Language',
     'menu' => 'Menu',
+
+    'admin_access_denied' => 'Access denied. Administrator rights required.',
     
     // Search
     'search_placeholder' => 'Search...',

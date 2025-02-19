@@ -18,6 +18,8 @@ return [
     'search' => 'Căutare',
     'language' => 'Limba',
     'menu' => 'Meniu',
+
+    'admin_access_denied' => 'Acces interzis. Necesită drepturi de administrator.',
     
     // Search
     'search_placeholder' => 'Căutare...',

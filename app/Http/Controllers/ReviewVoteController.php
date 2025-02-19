@@ -20,17 +20,17 @@ class ReviewVoteController extends Controller
         if ($existingVote) {
             if ($existingVote->vote_type === $validated['vote_type']) {
                 $existingVote->delete();
-                $message = 'Голос отменен';
+                $message = __('reviews.vote_cancelled');
             } else {
                 $existingVote->update(['vote_type' => $validated['vote_type']]);
-                $message = 'Голос изменен';
+                $message = __('reviews.vote_changed'); 
             }
         } else {
             $review->votes()->create([
                 'user_id' => auth()->id(),
                 'vote_type' => $validated['vote_type']
             ]);
-            $message = 'Голос учтен';
+            $message = __('reviews.vote_recorded');
         }
 
         // Обновляем счетчики

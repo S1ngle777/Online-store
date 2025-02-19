@@ -15,7 +15,6 @@ class CartController extends Controller
         $totalOriginalPrice = 0;
         
         foreach ($cartItems as $id => &$item) {
-            // Парсинг ID товара из ключа корзины (обрабатывает как обычные товары, так и товары с размерами)
             $productId = explode('-', $id)[0];
             $product = Product::find($productId);
             
@@ -39,7 +38,7 @@ class CartController extends Controller
         $sizeId = $request->input('size');
 
         if ($product->has_sizes && !$sizeId) {
-            return redirect()->back()->with('error', 'Пожалуйста, выберите размер');
+            return redirect()->back()->with('error', __('cart.select_size'));
         }
 
         $cart = session()->get('cart', []);
@@ -47,11 +46,10 @@ class CartController extends Controller
 
         $size = null;
 
-        // Проверька наличия товара и получение информации о размере, если у товара есть размеры
         if ($product->has_sizes) {
             $size = Size::find($sizeId);
             if (!$size) {
-                return redirect()->back()->with('error', 'Выбранный размер недоступен');
+                return redirect()->back()->with('error', __('cart.size_unavailable'));
             }
 
             $sizeStock = $product->getSizeStock($sizeId);
@@ -59,13 +57,12 @@ class CartController extends Controller
             
             if ($currentCartQuantity + $quantity > $sizeStock) {
                 return redirect()->back()
-                    ->with('error', "Недостаточно товара выбранного размера. Доступно: {$sizeStock} шт.");
+                    ->with('error', __('cart.insufficient_size_stock', ['available' => $sizeStock]));
             }
         } else {
-            // Проверка регулярного запаса товара
             if ($product->stock < $quantity) {
                 return redirect()->back()
-                    ->with('error', "Недостаточно товара на складе. Доступно: {$product->stock} шт.");
+                    ->with('error', __('cart.insufficient_stock', ['available' => $product->stock]));
             }
         }
 
@@ -83,7 +80,7 @@ class CartController extends Controller
         }
 
         session()->put('cart', $cart);
-        return redirect()->back()->with('success', 'Продукт добавлен в корзину!');
+        return redirect()->back()->with('success', __('cart.product_added'));
     }
 
     public function remove(Request $request, $cartKey)
@@ -93,9 +90,9 @@ class CartController extends Controller
         if (isset($cart[$cartKey])) {
             unset($cart[$cartKey]);
             session()->put('cart', $cart);
-            return redirect()->back()->with('success', 'Товар удален из корзины!');
+            return redirect()->back()->with('success', __('cart.product_removed'));
         }
 
-        return redirect()->back()->with('error', 'Товар не найден в корзине');
+        return redirect()->back()->with('error', __('cart.product_not_found'));
     }
 }

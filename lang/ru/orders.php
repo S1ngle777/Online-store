@@ -53,4 +53,12 @@ return [
         'completed' => 'Завершен',
         'cancelled' => 'Отменен',
     ],
+    'cart_empty' => 'Корзина пуста',
+    'insufficient_size_stock' => 'Недостаточно выбранного размера товара :product на складе',
+    'insufficient_stock' => 'Недостаточно товара :product на складе',
+    'order_placed_successfully' => 'Заказ успешно оформлен! Проверьте вашу почту.',
+    'status_updated' => 'Статус заказа обновлен',
+    'status_update_error' => 'Ошибка при обновлении статуса: :error',
+    'deleted_successfully' => 'Заказ успешно удален',
+    'delete_error' => 'Ошибка при удалении заказа: :error',
 ];

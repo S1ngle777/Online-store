@@ -72,7 +72,7 @@ class OrderController extends Controller
 
             $cartItems = session()->get('cart', []);
             if (empty($cartItems)) {
-                throw new \Exception('Корзина пуста');
+                throw new \Exception(__('orders.cart_empty'));
             }
 
             // Подсчет промежуточной суммы перед созданием заказа 
@@ -111,11 +111,15 @@ class OrderController extends Controller
                 if ($product->has_sizes) {
                     $sizeStock = $product->getSizeStock($sizeId);
                     if ($sizeStock < $item['quantity']) {
-                        throw new \Exception("Недостаточно выбранного размера товара {$item['name']} на складе");
+                        throw new \Exception(__('orders.insufficient_size_stock', [
+                            'product' => $item['name']
+                        ]));
                     }
                 } else {
                     if ($product->stock < $item['quantity']) {
-                        throw new \Exception("Недостаточно товара {$item['name']} на складе");
+                        throw new \Exception(__('orders.insufficient_stock', [
+                            'product' => $item['name']
+                        ]));
                     }
                 }
 
@@ -155,7 +159,7 @@ class OrderController extends Controller
             session()->forget('cart');
 
             return redirect()->route('orders.success', $order)
-                ->with('success', 'Заказ успешно оформлен! Проверьте вашу почту.');
+                ->with('success', __('orders.order_placed_successfully'));
 
         } catch (\Exception $e) {
             \DB::rollBack();
@@ -237,11 +241,11 @@ class OrderController extends Controller
 
             \DB::commit();
 
-            return redirect()->back()->with('success', 'Статус заказа обновлен');
+            return redirect()->back()->with('success', __('orders.status_updated'));
 
         } catch (\Exception $e) {
             \DB::rollBack();
-            return redirect()->back()->with('error', 'Ошибка при обновлении статуса: ' . $e->getMessage());
+            return redirect()->back()->with('error', __('orders.status_update_error', ['error' => $e->getMessage()]));
         }
     }
 
@@ -277,11 +281,13 @@ class OrderController extends Controller
             $order->delete();
             \DB::commit();
 
-            return redirect()->route('admin.orders.index')->with('success', 'Заказ успешно удален');
+            return redirect()->route('admin.orders.index')
+                ->with('success', __('orders.deleted_successfully'));
 
         } catch (\Exception $e) {
             \DB::rollBack();
-            return redirect()->back()->with('error', 'Ошибка при удалении заказа: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', __('orders.delete_error', ['error' => $e->getMessage()]));
         }
     }
 

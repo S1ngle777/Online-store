@@ -63,4 +63,9 @@ return [
     'out_of_five' => 'out of 5',
     'reviews_count' => 'reviews',
     'promotion_ends' => 'Promotion ends',
+    'created_successfully' => 'Product has been created successfully',
+    'updated_successfully' => 'Product has been updated successfully',
+    'deleted_successfully' => 'Product has been deleted successfully',
+    'create_error' => 'An error occurred while creating the product: :error',
+    'update_error' => 'An error occurred while updating the product: :error',
 ];

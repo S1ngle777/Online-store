@@ -15,4 +15,7 @@ return [
     'delete_category' => 'Delete',
     'confirm_delete' => 'Are you sure you want to delete this category?',
     'add_to_cart' => 'Add to Cart',
+    'created' => 'Category has been created successfully',
+    'updated' => 'Category has been updated successfully',
+    'deleted' => 'Category has been deleted successfully',
 ];

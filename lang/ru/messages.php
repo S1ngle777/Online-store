@@ -19,6 +19,8 @@ return [
     'language' => 'Язык',
     'menu' => 'Меню',
 
+    'admin_access_denied' => 'Доступ запрещен. Требуются права администратора.',
+
     // Search
     'search_placeholder' => 'Поиск...',
     'search_results' => 'Результаты поиска',

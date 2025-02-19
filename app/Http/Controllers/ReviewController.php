@@ -12,12 +12,12 @@ class ReviewController extends Controller
     {
         // Проверяем, купил ли пользователь товар
         if (!auth()->user()->hasPurchased($product)) {
-            return back()->with('error', 'Вы можете оставить отзыв только после покупки товара');
+            return back()->with('error', __('reviews.purchase_required'));
         }
 
         // Проверяем, не оставлял ли пользователь уже отзыв
         if ($product->reviews()->where('user_id', auth()->id())->exists()) {
-            return back()->with('error', 'Вы уже оставляли отзыв на этот товар');
+            return back()->with('error', __('reviews.already_reviewed'));
         }
 
         $validated = $request->validate([
@@ -31,22 +31,22 @@ class ReviewController extends Controller
             'comment' => $validated['comment']
         ]);
 
-        return back()->with('success', 'Отзыв успешно добавлен');
+        return back()->with('success', __('reviews.created_successfully'));
     }
 
     public function destroy(Review $review)
     {
         if (auth()->id() === $review->user_id || auth()->user()->isAdmin()) {
             $review->delete();
-            return back()->with('success', 'Отзыв удален');
+            return back()->with('success', __('reviews.deleted_successfully'));
         }
-        return back()->with('error', 'У вас нет прав для удаления этого отзыва');
+        return back()->with('error', __('reviews.delete_unauthorized'));
     }
 
     public function replyAsAdmin(Request $request, Review $review)
     {
         if (!auth()->user()->isAdmin()) {
-            return back()->with('error', 'Только администратор может отвечать на отзывы');
+            return back()->with('error', __('reviews.admin_only'));
         }
 
         $validated = $request->validate([
@@ -58,7 +58,7 @@ class ReviewController extends Controller
             'admin_reply_at' => now()
         ]);
 
-        return back()->with('success', 'Ответ добавлен');
+        return back()->with('success', __('reviews.reply_added'));
     }
 
 }

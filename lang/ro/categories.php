@@ -14,5 +14,8 @@ return [
     'edit_category' => 'Editare',
     'delete_category' => 'Șterge',
     'confirm_delete' => 'Sigur doriți să ștergeți această categorie?',
-    'add_to_cart' => 'Adăugați în coș'
+    'add_to_cart' => 'Adăugați în coș',
+    'created' => 'Categoria a fost creată cu succes',
+    'updated' => 'Categoria a fost actualizată cu succes',
+    'deleted' => 'Categoria a fost ștearsă cu succes',
 ];

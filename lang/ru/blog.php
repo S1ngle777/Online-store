@@ -25,4 +25,7 @@ return [
     'read_more' => 'Читать далее',
     'confirm_delete' => 'Вы уверены, что хотите удалить этот пост?',
     'return_to_post_list' => 'Вернуться к списку постов',
+    'created_successfully' => 'Пост успешно создан',
+    'updated_successfully' => 'Пост успешно обновлен',
+    'deleted_successfully' => 'Пост успешно удален',
 ];

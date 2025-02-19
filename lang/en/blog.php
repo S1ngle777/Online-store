@@ -25,4 +25,7 @@ return [
     'read_more' => 'Read More',
     'confirm_delete' => 'Are you sure you want to delete this post?',
     'return_to_post_list' => 'Return to Post List',
+    'created_successfully' => 'Post has been created successfully',
+    'updated_successfully' => 'Post has been updated successfully',
+    'deleted_successfully' => 'Post has been deleted successfully',
 ];

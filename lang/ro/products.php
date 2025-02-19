@@ -63,4 +63,9 @@ return [
     'out_of_five' => 'din 5',
     'reviews_count' => 'recenzii',
     'promotion_ends' => 'Promoția este valabilă până la',
+    'created_successfully' => 'Produsul a fost creat cu succes',
+    'updated_successfully' => 'Produsul a fost actualizat cu succes',
+    'deleted_successfully' => 'Produsul a fost șters cu succes',
+    'create_error' => 'A apărut o eroare la crearea produsului: :error',
+    'update_error' => 'A apărut o eroare la actualizarea produsului: :error',
 ];

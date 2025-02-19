@@ -110,7 +110,6 @@ class ProductController extends Controller
                 'discount_ends_at' => 'nullable|date'
             ]);
 
-            // Добавить has_sizes к проверенным данным
             $validated['has_sizes'] = $has_sizes;
             $validated['slug'] = Str::slug($validated['name']);
 
@@ -118,10 +117,8 @@ class ProductController extends Controller
                 $validated['image'] = $request->file('image')->store('products', 'public');
             }
 
-            // Создать продукт
             $product = Product::create($validated);
 
-            // Обработать размеры, если включено
             if ($has_sizes) {
                 $sizes = $request->input('sizes', []);
                 $stocks = $request->input('size_stocks', []);
@@ -144,13 +141,14 @@ class ProductController extends Controller
             }
 
             \DB::commit();
-            return redirect()->route('products.index')->with('success', 'Товар успешно создан');
+            return redirect()->route('products.index')
+                ->with('success', __('products.created_successfully'));
 
         } catch (\Exception $e) {
             \DB::rollBack();
             return back()
                 ->withInput()
-                ->with('error', 'Произошла ошибка при создании товара: ' . $e->getMessage());
+                ->with('error', __('products.create_error', ['error' => $e->getMessage()]));
         }
     }
 
@@ -222,13 +220,13 @@ class ProductController extends Controller
 
             \DB::commit();
             return redirect()->route('products.index')
-                ->with('success', 'Товар успешно обновлен');
+                ->with('success', __('products.updated_successfully'));
 
         } catch (\Exception $e) {
             \DB::rollBack();
             return back()
                 ->withInput()
-                ->with('error', 'Произошла ошибка при обновлении товара: ' . $e->getMessage());
+                ->with('error', __('products.update_error', ['error' => $e->getMessage()]));
         }
     }
 
@@ -241,6 +239,6 @@ class ProductController extends Controller
         $product->delete();
         
         return redirect()->route('products.index')
-            ->with('success', 'Товар успешно удален');
+            ->with('success', __('products.deleted_successfully'));
     }
 }

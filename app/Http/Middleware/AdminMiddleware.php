@@ -19,7 +19,7 @@ class AdminMiddleware
     {
         if (!auth()->check() || !auth()->user()->isAdmin()) {
             return redirect()->route('products.index')
-                ->with('error', 'Доступ запрещен. Требуются права администратора.');
+                ->with('error', __('messages.admin_access_denied'));
         }
 
         return $next($request);

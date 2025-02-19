@@ -53,4 +53,12 @@ return [
         'completed' => 'Completed',
         'cancelled' => 'Cancelled',
     ],
+    'cart_empty' => 'Cart is empty',
+    'insufficient_size_stock' => 'Insufficient stock for selected size of :product',
+    'insufficient_stock' => 'Insufficient stock for :product',
+    'order_placed_successfully' => 'Order successfully placed! Check your email.',
+    'status_updated' => 'Order status updated',
+    'status_update_error' => 'Status update error: :error',
+    'deleted_successfully' => 'Order successfully deleted',
+    'delete_error' => 'Error deleting order: :error',
 ];

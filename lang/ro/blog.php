@@ -24,5 +24,8 @@ return [
     'created' => 'Creat',
     'read_more' => 'Citește mai mult',
     'confirm_delete' => 'Ești sigur că vrei să ștergi această postare?',
-    'return_to_post_list' => 'Înapoi la lista de postări'
+    'return_to_post_list' => 'Înapoi la lista de postări',
+    'created_successfully' => 'Postarea a fost creată cu succes',
+    'updated_successfully' => 'Postarea a fost actualizată cu succes',
+    'deleted_successfully' => 'Postarea a fost ștearsă cu succes',
 ];

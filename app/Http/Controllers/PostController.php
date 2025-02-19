@@ -61,7 +61,7 @@ class PostController extends Controller
         Post::create($validated);
 
         return redirect()->route('blog.index')
-            ->with('success', 'Пост успешно создан');
+            ->with('success', __('blog.created_successfully'));
     }
 
     public function edit(Post $post)
@@ -107,7 +107,7 @@ class PostController extends Controller
         $post->save();
 
         return redirect()->route('blog.show', $post)
-            ->with('success', 'Пост успешно обновлен');
+            ->with('success', __('blog.updated_successfully'));
     }
 
     public function destroy(Post $post)
@@ -119,6 +119,6 @@ class PostController extends Controller
         $post->delete();
         
         return redirect()->route('blog.index')
-            ->with('success', 'Пост успешно удален');
+            ->with('success', __('blog.deleted_successfully'));
     }
 }
