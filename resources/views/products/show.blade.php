@@ -9,15 +9,15 @@
                     <div class="flex space-x-4">
                         <a href="{{ route('products.edit', $product) }}" 
                            class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                            Изменить товар
+                            {{ __('products.edit_product') }}
                         </a>
                         <form action="{{ route('products.destroy', $product) }}" method="POST" 
-                              onsubmit="return confirm('Вы уверены, что хотите удалить этот товар?')">
+                              onsubmit="return confirm('{{ __('products.delete_confirm') }}')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" 
                                     class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                Удалить товар
+                                {{ __('products.delete_product') }}
                             </button>
                         </form>
                     </div>
@@ -51,7 +51,8 @@
                                         </svg>
                                     @endfor
                                     <span class="ml-2 text-sm text-gray-600">
-                                        {{ number_format($product->averageRating(), 1) }} из 5 ({{ $product->reviewsCount() }} отзывов)
+                                        {{ number_format($product->averageRating(), 1) }} {{ __('products.out_of_five') }} 
+                                        ({{ $product->reviewsCount() }} {{ __('products.reviews_count') }})
                                     </span>
                                 </div>
                             </div>
@@ -67,14 +68,14 @@
                                     </span>
                                     @if($product->discount_ends_at)
                                         <p class="text-sm text-gray-500 mt-1">
-                                            Акция действует до {{ $product->discount_ends_at->format('d.m.Y H:i') }}
+                                            {{ __('products.promotion_ends') }} {{ $product->discount_ends_at->format('d.m.Y H:i') }}
                                         </p>
                                     @endif
                                 </div>
                             @else
                                 <p class="text-2xl font-bold mt-4">{{ $product->price }} MDL</p>
                             @endif
-                            <p class="text-gray-600 mt-2">В наличии: {{ $product->stock }}</p>
+                            <p class="text-gray-600 mt-2">{{ __('products.in_stock') }}: {{ $product->stock }}</p>
                             
                             @auth
                                 <form action="{{ route('cart.add', $product) }}" method="POST" class="mt-6">
@@ -82,7 +83,7 @@
                                     <div class="flex flex-col gap-4">
                                         @if($product->has_sizes)
                                             <div>
-                                                <label for="size" class="block text-sm font-medium text-gray-700 mb-2">Выберите размер:</label>
+                                                <label for="size" class="block text-sm font-medium text-gray-700 mb-2">{{ __('products.select_size') }}</label>
                                                 <div class="flex flex-wrap gap-2">
                                                     @foreach($product->sizes as $size)
                                                         <label class="relative">
@@ -101,7 +102,7 @@
                                                             </span>
                                                             @if($size->pivot->stock > 0)
                                                                 <span class="absolute -top-2 -right-2 bg-gray-500 text-white text-xs px-1 rounded-full">
-                                                                    {{ $size->pivot->stock }} шт
+                                                                    {{ $size->pivot->stock }} {{ __('products.pieces') }}
                                                                 </span>
                                                             @endif
                                                         </label>
@@ -140,7 +141,7 @@
                                                     </svg>
                                                 </button>
                                             </div>
-                                            <x-primary-button>Добавить в корзину</x-primary-button>
+                                            <x-primary-button>{{ __('products.add_to_cart') }}</x-primary-button>
                                         </div>
                                     </div>
                                 </form>
@@ -188,25 +189,25 @@
                 <div class="p-6">
                     <!-- Сортировка отзывов -->
                     <div class="mb-4 flex justify-between items-center">
-                        <h3 class="text-xl font-semibold">Отзывы</h3>
+                        <h3 class="text-xl font-semibold">{{ __('products.reviews') }}</h3>
                         <select name="sort" 
                                 onchange="window.location.href=this.value"
                                 class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                             <option value="{{ request()->fullUrlWithQuery(['sort' => 'date_desc']) }}" 
                                     {{ request('sort') === 'date_desc' ? 'selected' : '' }}>
-                                Сначала новые
+                                {{ __('products.sort_reviews.date_desc') }}
                             </option>
                             <option value="{{ request()->fullUrlWithQuery(['sort' => 'date_asc']) }}"
                                     {{ request('sort') === 'date_asc' ? 'selected' : '' }}>
-                                Сначала старые
+                                {{ __('products.sort_reviews.date_asc') }}
                             </option>
                             <option value="{{ request()->fullUrlWithQuery(['sort' => 'rating_desc']) }}"
                                     {{ request('sort') === 'rating_desc' ? 'selected' : '' }}>
-                                По рейтингу (высокий)
+                                {{ __('products.sort_reviews.rating_desc') }}
                             </option>
                             <option value="{{ request()->fullUrlWithQuery(['sort' => 'rating_asc']) }}"
                                     {{ request('sort') === 'rating_asc' ? 'selected' : '' }}>
-                                По рейтингу (низкий)
+                                {{ __('products.sort_reviews.rating_asc') }}
                             </option>
                         </select>
                     </div>
@@ -217,7 +218,7 @@
                                 <form action="{{ route('products.reviews.store', $product) }}" method="POST" class="mb-6">
                                     @csrf
                                     <div class="mb-4">
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Ваша оценка</label>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('products.your_rating') }}</label>
                                         <div class="flex items-center space-x-1" x-data="{ rating: 0, hoverRating: 0 }">
                                             @for ($i = 1; $i <= 5; $i++)
                                                 <label class="cursor-pointer">
@@ -245,7 +246,7 @@
                                     </div>
 
                                     <div class="mb-4">
-                                        <label for="comment" class="block text-sm font-medium text-gray-700 mb-2">Комментарий</label>
+                                        <label for="comment" class="block text-sm font-medium text-gray-700 mb-2">{{ __('products.comment') }}</label>
                                         <textarea id="comment" 
                                                 name="comment" 
                                                 rows="3" 
@@ -255,13 +256,13 @@
 
                                     <div class="flex justify-end">
                                         <x-primary-button type="submit">
-                                            Отправить отзыв
+                                            {{ __('products.submit_review') }}
                                         </x-primary-button>
                                     </div>
                                 </form>
                             @else
                                 <div class="mb-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
-                                    <p class="text-gray-600">Отзывы могут оставлять только пользователи, купившие этот товар</p>
+                                    <p class="text-gray-600">{{ __('products.purchase_required') }}</p>
                                 </div>
                             @endif
                         @endif
@@ -271,7 +272,6 @@
                     @foreach ($reviews as $review)
                         <div class="border-b pb-4 mb-4">
                             <div>
-                                <!-- Рейтинг и кнопка удаления на одном уровне -->
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
                                         @for ($i = 1; $i <= 5; $i++)
@@ -290,7 +290,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-500 hover:text-red-700" 
-                                                    onclick="return confirm('Вы уверены, что хотите удалить этот отзыв?')">
+                                                    onclick="return confirm('{{ __('products.delete_review_confirm') }}')">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                                                           d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -313,7 +313,7 @@
                                 @if($review->admin_reply)
                                     <div class="mt-3 pl-4 border-l-4 border-primary">
                                         <p class="text-sm text-gray-600">
-                                            <span class="font-semibold">Ответ администратора:</span>
+                                            <span class="font-semibold">{{ __('products.admin_reply') }}:</span>
                                             {{ $review->admin_reply }}
                                         </p>
                                         <p class="text-xs text-gray-500">{{ $review->admin_reply_at->diffForHumans() }}</p>
@@ -328,9 +328,9 @@
                                             <textarea name="admin_reply" 
                                                     rows="2" 
                                                     class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                                    placeholder="Ответить на отзыв..."></textarea>
+                                                    placeholder="{{ __('products.reply_placeholder') }}"></textarea>
                                             <button type="submit" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark">
-                                                Ответить
+                                                {{ __('products.reply') }}
                                             </button>
                                         </div>
                                     </form>

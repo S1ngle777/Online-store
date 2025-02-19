@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Результаты поиска') }}
+            {{ __('messages.search_results') }}
         </h2>
     </x-slot>
 
@@ -9,9 +9,9 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="mb-4">
                 <h3 class="text-lg font-medium">
-                    Результаты поиска для: "{{ $query }}"
+                    {{ __('messages.search_results_for') }}: "{{ $query }}"
                 </h3>
-                <p class="text-gray-600">Найдено {{ $products->total() }} товаров</p>
+                <p class="text-gray-600">{{ $products->total() }} {{ __('messages.products_found') }}</p>
             </div>
 
             @if($products->count() > 0)
@@ -31,7 +31,7 @@
                                     {{ $product->name }}
                                 </h3>
 
-                                <!-- Добавляем рейтинг -->
+                                <!-- Rating -->
                                 <div class="flex items-center mb-2">
                                     @for ($i = 1; $i <= 5; $i++)
                                         <svg class="w-4 h-4 {{ $i <= $product->averageRating() ? 'text-yellow-400' : 'text-gray-300' }}"
@@ -61,7 +61,7 @@
                                     @auth
                                         <form action="{{ route('cart.add', $product) }}" method="POST">
                                             @csrf
-                                            <x-primary-button>В корзину</x-primary-button>
+                                            <x-primary-button>{{ __('products.add_to_cart') }}</x-primary-button>
                                         </form>
                                     @endauth
                                 </div>
@@ -76,7 +76,7 @@
             @else
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
-                        <p class="text-gray-600">По вашему запросу ничего не найдено.</p>
+                        <p class="text-gray-600">{{ __('messages.no_results') }}</p>
                     </div>
                 </div>
             @endif

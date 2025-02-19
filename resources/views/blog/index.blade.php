@@ -2,12 +2,12 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Блог') }}
+                {{ __('blog.blog') }}
             </h2>
             @auth
                 @if(auth()->user()->isAdmin())
                     <x-primary-button onclick="window.location='{{ route('blog.create') }}'">
-                        {{ __('Создать пост') }}
+                        {{ __('blog.create_post') }}
                     </x-primary-button>
                 @endif
             @endauth
@@ -23,7 +23,7 @@
                             @if (!$post->is_published)
                                 <div class="mb-4">
                                     <span class="px-2 py-1 text-xs font-semibold text-yellow-800 bg-yellow-100 rounded-full">
-                                        Не опубликовано
+                                        {{ __('blog.not_published') }}
                                     </span>
                                 </div>
                             @endif
@@ -45,19 +45,19 @@
                                         @if($post->is_published && $post->published_at)
                                             {{ $post->published_at->format('d.m.Y') }}
                                         @else
-                                            Создан: {{ $post->created_at->format('d.m.Y') }}
+                                            {{ __('blog.created') }}: {{ $post->created_at->format('d.m.Y') }}
                                         @endif
                                     </span>
                                     @if(auth()->user()?->isAdmin())
                                         <span class="text-gray-400">•</span>
                                         <span class="text-gray-400">
-                                            {{ $post->is_published ? 'Опубликован' : 'Черновик' }}
+                                            {{ $post->is_published ? __('blog.published') : __('blog.draft') }}
                                         </span>
                                     @endif
                                 </div>
                                 <a href="{{ route('blog.show', $post) }}" 
                                    class="text-primary hover:text-primary-dark">
-                                    Читать далее →
+                                   {{ __('blog.read_more') }} →
                                 </a>
                             </div>
                         </div>

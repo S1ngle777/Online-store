@@ -16,4 +16,15 @@ class DeliveryMethod extends Model
         'delivery_time',
         'is_active'
     ];
+
+    public function getNameAttribute($value)
+    {
+        return __("delivery.{$value}.name");
+    }
+
+    public function getDescriptionAttribute($value)
+    {
+        return __("delivery.{$value}.description");
+    }
+
 }

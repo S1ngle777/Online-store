@@ -21,7 +21,8 @@ class OrderSeeder extends Seeder
                 'status' => 'processing',
                 'notes' => null,
                 'created_at' => '2024-12-04 16:29:28',
-                'updated_at' => '2024-12-04 17:01:12'
+                'updated_at' => '2024-12-04 17:01:12',
+                'delivery_method_id' => '1',
             ],
 
             [
@@ -35,7 +36,8 @@ class OrderSeeder extends Seeder
                 'status' => 'pending',
                 'notes' => 'Быстро',
                 'created_at' => '2024-12-04 16:46:13',
-                'updated_at' => '2024-12-04 16:46:13'
+                'updated_at' => '2024-12-04 16:46:13',
+                'delivery_method_id' => '1',
             ],
 
             [
@@ -49,7 +51,8 @@ class OrderSeeder extends Seeder
                 'status' => 'cancelled',
                 'notes' => null,
                 'created_at' => '2024-12-04 17:05:40',
-                'updated_at' => '2024-12-04 17:34:21'
+                'updated_at' => '2024-12-04 17:34:21',
+                'delivery_method_id' => '2',
             ],
 
             [
@@ -63,7 +66,8 @@ class OrderSeeder extends Seeder
                 'status' => 'completed',
                 'notes' => null,
                 'created_at' => '2024-12-04 17:41:47',
-                'updated_at' => '2024-12-04 17:41:47'
+                'updated_at' => '2024-12-04 17:41:47',
+                'delivery_method_id' => '3',
             ],
 
         ];

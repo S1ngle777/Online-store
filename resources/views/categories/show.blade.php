@@ -10,14 +10,15 @@
                     <div class="flex space-x-2">
                         <a href="{{ route('categories.edit', $category) }}"
                             class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                            Изменить
+                            {{ __('categories.edit_category') }}
                         </a>
-                        <form action="{{ route('categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Вы уверены, что хотите удалить эту категорию?')">
+                        <form action="{{ route('categories.destroy', $category) }}" method="POST"
+                            onsubmit="return confirm('{{ __('categories.confirm_delete') }}')">
                             @csrf
                             @method('DELETE')
                             <button type="submit"
                                 class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                Удалить</button>
+                                {{ __('categories.delete_category') }}</button>
                         </form>
                     </div>
                 @endif
@@ -48,7 +49,7 @@
                                 <div class="mt-4 text-right">
                                     <form action="{{ route('cart.add', $product) }}" method="POST">
                                         @csrf
-                                        <x-primary-button>Добавить в корзину</x-primary-button>
+                                        <x-primary-button>{{ __('categories.add_to_cart') }}</x-primary-button>
                                     </form>
                                 </div>
                             @endauth

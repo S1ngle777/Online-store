@@ -14,22 +14,22 @@ class DeliveryMethodSeeder extends Seeder
     public function run(): void
     {
         DeliveryMethod::create([
-            'name' => 'Стандартная доставка',
-            'description' => 'Доставка в течение 2-4 рабочих дней',
+            'name' => 'standard',
+            'description' => 'standard',
             'price' => 50.00,
             'delivery_time' => 3,
         ]);
 
         DeliveryMethod::create([
-            'name' => 'Экспресс-доставка',
-            'description' => 'Доставка на следующий рабочий день',
+            'name' => 'express',
+            'description' => 'express',
             'price' => 100.00,
             'delivery_time' => 1,
         ]);
 
         DeliveryMethod::create([
-            'name' => 'Самовывоз',
-            'description' => 'Бесплатный самовывоз из нашего магазина',
+            'name' => 'pickup',
+            'description' => 'pickup',
             'price' => 0.00,
             'delivery_time' => 0,
         ]);

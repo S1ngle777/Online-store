@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Мои заказы') }}
+            {{ __('orders.my_orders') }}
         </h2>
     </x-slot>
 
@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
                     @if ($orders->isEmpty())
-                        <p class="text-gray-500 text-center">У вас пока нет заказов</p>
+                        <p class="text-gray-500 text-center">{{ __('orders.no_orders') }}</p>
                     @else
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
@@ -18,23 +18,23 @@
                                     <tr>
                                         <th
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            № заказа
+                                            {{ __('orders.order_number') }}
                                         </th>
                                         <th
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Дата
+                                            {{ __('orders.order_date') }}
                                         </th>
                                         <th
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Статус
+                                            {{ __('orders.order_status') }}
                                         </th>
                                         <th
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Сумма
+                                            {{ __('orders.order_amount') }}
                                         </th>
                                         <th
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Действия
+                                            {{ __('orders.order_actions') }}
                                         </th>
                                     </tr>
                                 </thead>
@@ -59,7 +59,7 @@
                                             <td class="px-6 py-4 whitespace-nowrap text-s font-medium">
                                                 <a href="{{ route('orders.show', $order) }}"
                                                     class="text-indigo-600 hover:text-indigo-900">
-                                                    Подробнее
+                                                    {{ __('orders.details') }}
                                                 </a>
                                             </td>
                                         </tr>

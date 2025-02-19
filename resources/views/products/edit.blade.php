@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Изменение товара') }}
+            {{ __('products.edit_product') }}
         </h2>
     </x-slot>
 
@@ -14,31 +14,31 @@
                         @method('PUT')
 
                         <div>
-                            <x-input-label for="name" :value="__('Название')" />
+                            <x-input-label for="name" :value="__('products.name')" />
                             <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name', $product->name)" required autofocus />
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
                         <div class="mt-4">
-                            <x-input-label for="description" :value="__('Описание')" />
+                            <x-input-label for="description" :value="__('products.description')" />
                             <textarea id="description" name="description" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="4">{{ old('description', $product->description) }}</textarea>
                             <x-input-error :messages="$errors->get('description')" class="mt-2" />
                         </div>
 
                         <div class="mt-4">
-                            <x-input-label for="price" :value="__('Цена')" />
+                            <x-input-label for="price" :value="__('products.price')" />
                             <x-text-input id="price" class="block mt-1 w-full" type="number" name="price" step="1" :value="old('price', $product->price)" required />
                             <x-input-error :messages="$errors->get('price')" class="mt-2" />
                         </div>
 
                         <div class="mt-4">
-                            <x-input-label for="stock" :value="__('Количество на складе')" />
+                            <x-input-label for="stock" :value="__('products.stock')" />
                             <x-text-input id="stock" class="block mt-1 w-full" type="number" name="stock" :value="old('stock', $product->stock)" required />
                             <x-input-error :messages="$errors->get('stock')" class="mt-2" />
                         </div>
 
                         <div class="mt-4">
-                            <x-input-label for="category_id" :value="__('Категория')" />
+                            <x-input-label for="category_id" :value="__('products.category')" />
                             <select id="category_id" name="category_id" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>
@@ -50,18 +50,32 @@
                         </div>
 
                         <div class="mt-4">
-                            <x-input-label for="image" :value="__('Изображение')" />
+                            <x-input-label for="image" :value="__('products.image')" />
                             @if ($product->image)
-                                <div class="mt-2">
-                                    <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-32 h-32 object-cover">
+                                <div class="mt-2 mb-4">
+                                    <p class="text-sm text-gray-600 mb-2">{{ __('products.current_image') }}:</p>
+                                    <img src="{{ Storage::url($product->image) }}" 
+                                         alt="{{ $product->name }}" 
+                                         class="w-32 h-32 object-cover rounded">
                                 </div>
                             @endif
-                            <input type="file" id="image" name="image" class="mt-1" accept="image/*">
+                            <div class="relative">
+                                <input type="file" 
+                                       id="image" 
+                                       name="image" 
+                                       class="hidden"
+                                       accept="image/*"
+                                       onchange="updateFileName(this)">
+                                <label for="image" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150 cursor-pointer">
+                                    {{ __('products.change_image') }}
+                                </label>
+                                <span id="file-name" class="ml-3 text-gray-600">{{ __('products.no_file_selected') }}</span>
+                            </div>
                             <x-input-error :messages="$errors->get('image')" class="mt-2" />
                         </div>
 
                         <div class="mt-4">
-                            <x-input-label for="discount" :value="__('Скидка (%)')" />
+                            <x-input-label for="discount" :value="__('products.discount')" />
                             <x-text-input id="discount" 
                                           class="block mt-1 w-full" 
                                           type="number" 
@@ -74,7 +88,7 @@
                         </div>
 
                         <div class="mt-4">
-                            <x-input-label for="discount_ends_at" :value="__('Действует до')" />
+                            <x-input-label for="discount_ends_at" :value="__('products.discount_ends_at')" />
                             <x-text-input id="discount_ends_at" 
                                           class="block mt-1 w-full" 
                                           type="datetime-local" 
@@ -91,13 +105,13 @@
                                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                        {{ $product->has_sizes ? 'checked' : '' }}
                                        onchange="document.getElementById('sizes-input').style.display = this.checked ? 'block' : 'none'">
-                                <span class="ml-2 text-sm text-gray-600">Товар имеет разные размеры</span>
+                                <span class="ml-2 text-sm text-gray-600">{{ __('products.has_sizes') }}</span>
                             </label>
                         </div>
 
                         <!-- Секция размеров -->
                         <div id="sizes-input" class="mt-4" style="display: {{ $product->has_sizes ? 'block' : 'none' }}">
-                            <x-input-label value="Размеры и количество" class="mb-3"/>
+                            <x-input-label value="{{ __('products.sizes_and_quantity') }}" class="mb-3"/>
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                 @foreach(App\Models\Size::where('type', 'clothing')->get() as $size)
                                     <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-indigo-500 transition-colors {{ $product->sizes->contains($size->id) ? 'border-indigo-500 ring-2 ring-indigo-500/20' : '' }}">
@@ -114,7 +128,7 @@
                                                        value="{{ $product->getSizeStock($size->id) }}"
                                                        min="0"
                                                        class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
-                                                       placeholder="Количество">
+                                                       placeholder="{{ __('products.stock') }}">
                                             </div>
                                         </label>
                                     </div>
@@ -124,7 +138,7 @@
 
                         <div class="flex items-center justify-end mt-4">
                             <x-primary-button class="ml-4">
-                                {{ __('Изменить товар') }}
+                                {{ __('products.save_changes') }}
                             </x-primary-button>
                         </div>
                     </form>
@@ -132,4 +146,11 @@
             </div>
         </div>
     </div>
+
+    <script>
+    function updateFileName(input) {
+        const fileName = input.files[0] ? input.files[0].name : "{{ __('products.no_file_selected') }}";
+        document.getElementById('file-name').textContent = fileName;
+    }
+    </script>
 </x-app-layout>

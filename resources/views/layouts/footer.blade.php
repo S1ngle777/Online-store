@@ -3,28 +3,28 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             <!-- О нас -->
             <div>
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">О нас</h3>
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ __('footer.about') }}</h3>
                 <p class="text-gray-600 text-sm">
-                    Молдавские изделия ручной работы - это уникальные товары, созданные местными мастерами с любовью и вниманием к деталям.
+                    {{ __('footer.handmade_moldovan_products') }}
                 </p>
             </div>
 
             <!-- Навигация -->
             <div>
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Навигация</h3>
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ __('footer.navigation') }}</h3>
                 <ul class="space-y-2">
-                    <li><a href="{{ route('home') }}" class="text-gray-600 hover:text-primary">Главная</a></li>
-                    <li><a href="{{ route('products.index') }}" class="text-gray-600 hover:text-primary">Товары</a></li>
-                    <li><a href="{{ route('categories.index') }}" class="text-gray-600 hover:text-primary">Категории</a></li>
-                    <li><a href="{{ route('about') }}" class="text-gray-600 hover:text-primary">О нас</a></li>
+                    <li><a href="{{ route('home') }}" class="text-gray-600 hover:text-primary">{{ __('footer.home') }}</a></li>
+                    <li><a href="{{ route('products.index') }}" class="text-gray-600 hover:text-primary">{{ __('footer.products') }}</a></li>
+                    <li><a href="{{ route('categories.index') }}" class="text-gray-600 hover:text-primary">{{ __('footer.categories') }}</a></li>
+                    <li><a href="{{ route('about') }}" class="text-gray-600 hover:text-primary">{{ __('footer.about') }}</a></li>
                 </ul>
             </div>
 
             <!-- Контакты -->
             <div>
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Контакты</h3>
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ __('footer.contact') }}</h3>
                 <ul class="space-y-2 text-gray-600">
-                    <li>📍 Кишинёв, Молдова</li>
+                    <li>📍 {{ __('footer.location') }}</li>
                     <li>📞 +373 77 777 777</li>
                     <li>✉️ info@handmade.md</li>
                 </ul>
@@ -32,7 +32,7 @@
 
             <!-- Социальные сети -->
             <div>
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Мы в соцсетях</h3>
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ __('footer.social_media') }}</h3>
                 <div class="flex space-x-4">
                     <a href="#" class="text-gray-600 hover:text-primary">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">

@@ -34,7 +34,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Оформление заказа
+            {{ __('orders.order_form') }}
         </h2>
     </x-slot>
 
@@ -50,7 +50,7 @@
 
                     @if ($errors->has('items.*'))
                         <div class="mb-4 p-4 bg-red-50 border border-red-200 text-red-600 rounded-lg">
-                            <p>Невозможно оформить заказ: недостаточное количество товара на складе</p>
+                            <p>{{ __('orders.order_stock_error') }}</p>
                         </div>
                     @endif
 
@@ -59,10 +59,10 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <h3 class="text-lg font-semibold mb-4">Контактная информация</h3>
+                                <h3 class="text-lg font-semibold mb-4">{{ __('orders.contacts') }}</h3>
 
                                 <div class="mb-4">
-                                    <x-input-label for="name" value="Имя" />
+                                    <x-input-label for="name" value="{{ __('orders.name') }}" />
                                     <x-text-input id="name" class="block mt-1 w-full" type="text" name="name"
                                         :value="old('name', auth()->user()->name)" required />
                                     <x-input-error :messages="$errors->get('name')" class="mt-2" />
@@ -76,14 +76,14 @@
                                 </div>
 
                                 <div class="mb-4">
-                                    <x-input-label for="phone" value="Телефон" />
+                                    <x-input-label for="phone" value="{{ __('orders.phone') }}" />
                                     <x-text-input id="phone" class="block mt-1 w-full" type="tel" name="phone"
                                         :value="old('phone')" required />
                                     <x-input-error :messages="$errors->get('phone')" class="mt-2" />
                                 </div>
 
                                 <div class="mb-4">
-                                    <x-input-label for="address" value="Адрес доставки" />
+                                    <x-input-label for="address" value="{{ __('orders.address') }}" />
                                     <textarea id="address" 
                                               name="address"
                                               class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
@@ -93,7 +93,7 @@
                                 </div>
 
                                 <div class="mb-4">
-                                    <x-input-label for="notes" value="Примечания к заказу" />
+                                    <x-input-label for="notes" value="{{ __('orders.notes') }}" />
                                     <textarea id="notes" name="notes"
                                         class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                         rows="3">{{ old('notes') }}</textarea>
@@ -102,7 +102,7 @@
 
                                 <!-- Способ доставки -->
                                 <div class="mb-4">
-                                    <x-input-label value="Способ доставки" />
+                                    <x-input-label value="{{ __('delivery.delivery_method') }}" />
                                     <div class="space-y-2 mt-2">
                                         @foreach ($deliveryMethods as $method)
                                             <div>
@@ -118,7 +118,7 @@
                                                     <div class="ml-2">
                                                         <span class="font-medium block">{{ $method->name }}</span>
                                                         <span class="text-gray-500 text-sm">
-                                                            {{ $method->price }} MDL, {{ $method->delivery_time }} дн.
+                                                            {{ $method->price }} MDL, {{ $method->delivery_time }} {{ __('delivery.days') }}
                                                         </span>
                                                         <p class="text-sm text-gray-500">{{ $method->description }}</p>
                                                     </div>
@@ -130,7 +130,7 @@
 
                                 <!-- Способ оплаты -->
                                 <div class="mb-4">
-                                    <x-input-label value="Способ оплаты" />
+                                    <x-input-label value="{{ __('orders.payment_method') }}" />
                                     <div class="space-y-2 mt-2">
                                         <div>
                                             <label class="flex items-center">
@@ -140,10 +140,10 @@
                                                        class="form-radio border-gray-300 text-primary focus:ring-0"
                                                        {{ (old('payment_method') ?? session('payment_method')) == 'cash' ? 'checked' : '' }} 
                                                        required>
-                                                <span class="ml-2">Наличными при получении</span>
+                                                <span class="ml-2">{{ __('orders.cash') }}</span>
                                             </label>
                                         </div>
-                                        <div>
+                                        {{-- <div>
                                             <label class="flex items-center">
                                                 <input type="radio" 
                                                        name="payment_method" 
@@ -151,9 +151,9 @@
                                                        class="form-radio border-gray-300 text-primary focus:ring-0"
                                                        {{ (old('payment_method') ?? session('payment_method')) == 'card' ? 'checked' : '' }} 
                                                        required>
-                                                <span class="ml-2">Банковской картой онлайн</span>
+                                                <span class="ml-2">{{ __('orders.card') }}</span>
                                             </label>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
 
@@ -164,7 +164,7 @@
                                             <input type="checkbox" name="save_address" class="form-checkbox text-primary"
                                                 value="1">
                                             <span class="ml-2 text-sm text-gray-600">
-                                                Сохранить этот адрес для будущих заказов
+                                                {{ __('orders.save_address') }}
                                             </span>
                                         </label>
                                     </div>
@@ -172,7 +172,7 @@
                             </div>
 
                             <div>
-                                <h3 class="text-lg font-semibold mb-4">Ваш заказ</h3>
+                                <h3 class="text-lg font-semibold mb-4">{{ __('orders.your_order') }}</h3>
 
                                 <div class="space-y-4">
                                     @foreach ($cartItems as $id => $item)
@@ -180,9 +180,9 @@
                                             <div>
                                                 <h4 class="font-medium">{{ $item['name'] }}</h4>
                                                 <p class="text-sm text-gray-600">
-                                                    Кл-во {{ $item['quantity'] }}
+                                                    {{ __('orders.quantity') }}: {{ $item['quantity'] }}
                                                     @if(isset($item['size_name']))
-                                                        <span class="ml-2">Размер: {{ $item['size_name'] }}</span>
+                                                        <span class="ml-2">{{ __('orders.size') }}: {{ $item['size_name'] }}</span>
                                                     @endif
                                                     @if (isset($item['original_price']) && $item['original_price'] > $item['price'])
                                                         <span class="text-green-600 ml-2">
@@ -212,7 +212,7 @@
                                     @if ($totalSaving > 0)
                                         <div class="bg-green-50 p-4 rounded-md mb-4">
                                             <div class="text-green-700">
-                                                <p>Ваша экономия: <span
+                                                <p>{{ __('orders.savings') }} <span
                                                         class="font-bold">{{ number_format($totalSaving, 2) }}
                                                         MDL</span></p>
                                                 <p class="text-sm mt-1">
@@ -229,17 +229,17 @@
 
                                     <div class="space-y-2">
                                         <div class="flex justify-between text-sm">
-                                            <span>Стоимость товаров:</span>
+                                            <span>{{ __('orders.item_cost') }}:</span>
                                             <span>{{ number_format($totalPrice, 2) }} MDL</span>
                                         </div>
 
                                         <div class="flex justify-between text-sm">
-                                            <span>Стоимость доставки:</span>
+                                            <span>{{ __('orders.delivery_cost') }}:</span>
                                             <span id="delivery-cost">0.00 MDL</span>
                                         </div>
 
                                         <div class="flex justify-between items-center font-bold pt-2 border-t">
-                                            <p>Итого к оплате:</p>
+                                            <p>{{ __('orders.total') }}:</p>
                                             <div class="text-right">
                                                 <span
                                                     class="font-bold {{ $totalSaving > 0 ? 'text-red-600' : '' }}"
@@ -258,7 +258,7 @@
 
                         <div class="mt-6 text-right">
                             <x-primary-button class="ml-4">
-                                Оформить заказ
+                                {{ __('orders.place_order') }}
                             </x-primary-button>
                         </div>
                     </form>

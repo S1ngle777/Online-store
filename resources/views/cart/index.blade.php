@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Корзина покупок') }}
+            {{ __('cart.cart') }}
         </h2>
     </x-slot>
 
@@ -37,9 +37,9 @@
                                             </div>
                                             <div class="flex flex-1 items-end justify-between text-sm">
                                                 <p class="text-gray-500">
-                                                    Кл-во {{ $item['quantity'] }}
+                                                    {{ __('cart.quantity') }} {{ $item['quantity'] }}
                                                     @if(isset($item['size_name']))
-                                                        <span class="ml-2">Размер: {{ $item['size_name'] }}</span>
+                                                        <span class="ml-2">{{ __('cart.size') }}: {{ $item['size_name'] }}</span>
                                                     @endif
                                                 </p>
                                                 <form action="{{ route('cart.remove', $id) }}" method="POST">
@@ -47,7 +47,7 @@
                                                     @method('DELETE')
                                                     <button type="submit" 
                                                             class="text-red-600 hover:text-red-500 font-medium">
-                                                        Убрать
+                                                        {{ __('cart.remove') }}
                                                     </button>
                                                 </form>
                                             </div>
@@ -63,7 +63,7 @@
                             @if($totalSaving > 0)
                                 <div class="bg-green-50 p-4 rounded-md mb-4">
                                     <div class="text-green-700">
-                                        <p>Ваша экономия: <span class="font-bold">{{ number_format($totalSaving, 2) }} MDL</span></p>
+                                        <p>{{ __('cart.savings') }}: <span class="font-bold">{{ number_format($totalSaving, 2) }} MDL</span></p>
                                         <p class="text-sm mt-1">
                                             <span class="line-through">{{ number_format($totalOriginalPrice, 2) }} MDL</span> → 
                                             <span class="font-semibold">{{ number_format($totalPrice, 2) }} MDL</span>
@@ -72,7 +72,7 @@
                                 </div>
                             @endif
                             <div class="flex justify-between text-base font-medium text-gray-900">
-                                <p>Всего</p>
+                                <p>{{ __('cart.total') }}</p>
                                 <div class="text-right">
                                     @if($totalSaving > 0)
                                         <span class="line-through text-sm text-gray-500">{{ number_format($totalOriginalPrice, 2) }} MDL</span><br>
@@ -85,12 +85,12 @@
                             <div class="mt-6">
                                 <a href="{{ route('orders.checkout') }}"
                                     class="flex items-center justify-center rounded-md border border-transparent bg-primary px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-primary-dark">
-                                    Оформить заказ
+                                    {{ __('cart.checkout') }}
                                 </a>
                             </div>
                         </div>
                     @else
-                        <p class="text-gray-500 text-center">Ваша корзина пуста</p>
+                        <p class="text-gray-500 text-center">{{ __('cart.empty_cart') }}</p>
                     @endif
                 </div>
             </div>

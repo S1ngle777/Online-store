@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Создание категории') }}
+            {{ __('categories.category_creation') }}
         </h2>
     </x-slot>
 
@@ -13,14 +13,14 @@
                         @csrf
 
                         <div>
-                            <x-input-label for="name" :value="__('Название')" />
+                            <x-input-label for="name" :value="__('categories.name')" />
                             <x-text-input id="name" class="block mt-1 w-full" type="text" name="name"
                                 :value="old('name')" required autofocus />
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
                         <div class="mt-4">
-                            <x-input-label for="description" :value="__('Описание')" />
+                            <x-input-label for="description" :value="__('categories.description')" />
                             <textarea id="description" name="description"
                                 class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                 rows="4">{{ old('description') }}</textarea>
@@ -29,7 +29,7 @@
 
                         <div class="flex items-center justify-end mt-4">
                             <x-primary-button class="ml-4">
-                                {{ __('Создать категорию') }}
+                                {{ __('categories.create') }}
                             </x-primary-button>
                         </div>
                     </form>

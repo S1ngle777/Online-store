@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Category') }}
+            {{ __('categories.edit') }}
         </h2>
     </x-slot>
 
@@ -14,20 +14,20 @@
                         @method('PUT')
 
                         <div>
-                            <x-input-label for="name" :value="__('Название')" />
+                            <x-input-label for="name" :value="__('categories.name')" />
                             <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name', $category->name)" required autofocus />
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
                         <div class="mt-4">
-                            <x-input-label for="description" :value="__('Описание')" />
+                            <x-input-label for="description" :value="__('categories.description')" />
                             <textarea id="description" name="description" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="4">{{ old('description', $category->description) }}</textarea>
                             <x-input-error :messages="$errors->get('description')" class="mt-2" />
                         </div>
 
                         <div class="flex items-center justify-end mt-4">
                             <x-primary-button class="ml-4">
-                                {{ __('Обновить категорию') }}
+                                {{ __('categories.update') }}
                             </x-primary-button>
                         </div>
                     </form>

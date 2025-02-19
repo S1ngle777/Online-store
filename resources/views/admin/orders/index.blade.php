@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Управление заказами') }}
+            {{ __('messages.manage_orders') }}
         </h2>
     </x-slot>
 
@@ -10,29 +10,29 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
                     @if ($orders->isEmpty())
-                        <p class="text-gray-500 text-center">Заказов пока нет</p>
+                        <p class="text-gray-500 text-center">{{ __('messages.no_orders') }}</p>
                     @else
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            № заказа
+                                            {{ __('messages.order_number') }}
                                         </th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Покупатель
+                                            {{ __('messages.customer') }}
                                         </th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Дата
+                                            {{ __('messages.date') }}
                                         </th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Статус
+                                            {{ __('messages.status') }}
                                         </th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Сумма
+                                            {{ __('messages.amount') }}
                                         </th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Действия
+                                            {{ __('messages.actions') }}
                                         </th>
                                     </tr>
                                 </thead>
@@ -48,11 +48,11 @@
                                                     <div class="text-gray-500">{{ $order->email }}</div>
                                                     <div class="text-gray-500">{{ $order->phone }}</div>
                                                     <div class="text-gray-500">
-                                                        <span class="font-medium">Доставка:</span> 
-                                                        {{ $order->deliveryMethod ? $order->deliveryMethod->name : 'Не указан' }}
+                                                        <span class="font-medium">{{ __('messages.delivery') }}</span>:
+                                                        {{ $order->deliveryMethod ? $order->deliveryMethod->name : __('delivery.not_specified.name') }}
                                                     </div>
                                                     <div class="text-gray-500">
-                                                        <span class="font-medium">Оплата:</span> {{ $order->payment_method_text }}
+                                                        <span class="font-medium">{{ __('messages.payment') }}:</span>  {{ $order->payment_method_text }}
                                                     </div>
                                                 </div>
                                             </td>
@@ -70,7 +70,7 @@
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <a href="{{ route('orders.show', $order) }}" 
                                                    class="text-indigo-600 hover:text-indigo-900">
-                                                    Подробнее
+                                                    {{ __('messages.details') }} 
                                                 </a>
                                             </td>
                                         </tr>

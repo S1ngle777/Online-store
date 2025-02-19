@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Создание поста') }}
+            {{ __('blog.create_post') }}
         </h2>
     </x-slot>
 
@@ -13,7 +13,7 @@
                         @csrf
 
                         <div>
-                            <x-input-label for="title" :value="__('Заголовок')" />
+                            <x-input-label for="title" :value="__('blog.title')" />
                             <x-text-input id="title" 
                                          class="block mt-1 w-full" 
                                          type="text" 
@@ -25,7 +25,7 @@
                         </div>
 
                         <div class="mt-4">
-                            <x-input-label for="content" :value="__('Содержание')" />
+                            <x-input-label for="content" :value="__('blog.content')" />
                             <textarea id="content"
                                     name="content"
                                     rows="10"
@@ -35,12 +35,19 @@
                         </div>
 
                         <div class="mt-4">
-                            <x-input-label for="image" :value="__('Изображение')" />
-                            <input type="file" 
-                                   id="image" 
-                                   name="image" 
-                                   class="mt-1"
-                                   accept="image/*">
+                            <x-input-label for="image" :value="__('blog.image')" />
+                            <div class="relative">
+                                <input type="file" 
+                                       id="image" 
+                                       name="image" 
+                                       class="hidden"
+                                       accept="image/*"
+                                       onchange="updateFileName(this)">
+                                <label for="image" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150 cursor-pointer">
+                                    {{ __('blog.select_file') }}
+                                </label>
+                                <span id="file-name" class="ml-3 text-gray-600">{{ __('blog.no_file_selected') }}</span>
+                            </div>
                             <x-input-error :messages="$errors->get('image')" class="mt-2" />
                         </div>
 
@@ -51,13 +58,13 @@
                                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
                                        value="1"
                                        {{ old('is_published') ? 'checked' : '' }}>
-                                <span class="ml-2 text-sm text-gray-600">{{ __('Опубликовать сразу') }}</span>
+                                <span class="ml-2 text-sm text-gray-600">{{ __('blog.publish_now') }}</span>
                             </label>
                         </div>
 
                         <div class="flex items-center justify-end mt-4">
                             <x-primary-button>
-                                {{ __('Создать пост') }}
+                                {{ __('blog.create_post_button') }}
                             </x-primary-button>
                         </div>
                     </form>
@@ -65,4 +72,11 @@
             </div>
         </div>
     </div>
+
+    <script>
+    function updateFileName(input) {
+        const fileName = input.files[0] ? input.files[0].name : "{{ __('blog.no_file_selected') }}";
+        document.getElementById('file-name').textContent = fileName;
+    }
+    </script>
 </x-app-layout>

@@ -53,19 +53,19 @@ class Order extends Model
     {
         $statuses = [
             'pending' => [
-                'text' => 'В ожидании',
+                'text' => __('messages.pending'),
                 'class' => 'bg-yellow-100 text-yellow-800'
             ],
             'processing' => [
-                'text' => 'Обрабатывается',
+                'text' => __('messages.processing'),
                 'class' => 'bg-blue-100 text-blue-800'
             ],
             'completed' => [
-                'text' => 'Завершен',
+                'text' => __('messages.completed'),
                 'class' => 'bg-green-100 text-green-800'
             ],
             'cancelled' => [
-                'text' => 'Отменен',
+                'text' => __('messages.cancelled'),
                 'class' => 'bg-red-100 text-red-800'
             ]
         ];

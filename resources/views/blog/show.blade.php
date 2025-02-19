@@ -8,15 +8,15 @@
                 @if(auth()->user()->isAdmin())
                     <div class="flex space-x-2">
                         <x-primary-button onclick="window.location='{{ route('blog.edit', $post) }}'">
-                            {{ __('Редактировать') }}
+                            {{ __('blog.edit_post') }}
                         </x-primary-button>
                         <form action="{{ route('blog.destroy', $post) }}" method="POST" 
-                              onsubmit="return confirm('Вы уверены, что хотите удалить этот пост?')">
+                              onsubmit="return confirm('{{ __('blog.confirm_delete') }}')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" 
                                     class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                {{ __('Удалить') }}
+                                {{ __('blog.delete_post') }}
                             </button>
                         </form>
                     </div>
@@ -50,7 +50,7 @@
                         @if(auth()->user()?->isAdmin())
                             <span class="mx-2">•</span>
                             <span class="text-yellow-600">
-                                {{ $post->is_published ? 'Опубликован' : 'Черновик' }}
+                                {{ $post->is_published ? __('blog.published') : __('blog.draft') }}
                             </span>
                         @endif
                     </div>
@@ -64,7 +64,7 @@
                     <div class="mt-8 pt-8 border-t border-gray-200">
                         <a href="{{ route('blog.index') }}" 
                            class="text-primary hover:text-primary-dark">
-                            ← Вернуться к списку постов
+                            ← {{ __('blog.return_to_post_list') }}
                         </a>
                     </div>
                 </div>

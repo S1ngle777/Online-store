@@ -30,19 +30,24 @@ class OrderCompleted extends Notification
         $deliveryMethod = $this->order->deliveryMethod;
 
         return (new MailMessage)
-            ->subject('Заказ №' . $this->order->id . ' выполнен')
-            ->greeting('Здравствуйте, ' . $this->order->name . '!')
-            ->line('Ваш заказ успешно выполнен и доставлен.')
-            ->line('Детали заказа:')
-            ->line('Номер заказа: №' . $this->order->id)
-            ->line('Сумма заказа: ' . number_format($this->order->total_amount, 2) . ' MDL')
-            ->line('Способ доставки: ' . ($deliveryMethod ? $deliveryMethod->name : 'Не указан'))
-            ->line('Адрес доставки: ' . $this->order->address)
-            ->action('Посмотреть заказ', $url)
-            ->line('Спасибо, что выбрали наш магазин!')
-            ->line('Пожалуйста, не забудьте оставить отзыв о приобретенных товарах - это поможет другим покупателям сделать правильный выбор.')
-            ->line('Будем рады видеть вас снова!')
-            ->salutation('С уважением, команда Handmade.md');
+            ->subject(__('notifications.order_completed.subject', ['number' => $this->order->id]))
+            ->greeting(__('notifications.order_completed.greeting', ['name' => $this->order->name]))
+            ->line(__('notifications.order_completed.completed_message'))
+            ->line(__('notifications.order_completed.order_details'))
+            ->line(__('notifications.order_completed.order_number', ['number' => $this->order->id]))
+            ->line(__('notifications.order_completed.order_amount', [
+                'amount' => number_format($this->order->total_amount, 2),
+                'currency' => 'MDL'
+            ]))
+            ->line(__('notifications.order_completed.delivery_method', [
+                'method' => $deliveryMethod ? $deliveryMethod->name : __('delivery.not_specified.name')
+            ]))
+            ->line(__('notifications.order_completed.delivery_address', ['address' => $this->order->address]))
+            ->action(__('notifications.order_completed.view_order'), $url)
+            ->line(__('notifications.order_completed.thank_you'))
+            ->line(__('notifications.order_completed.review_request'))
+            ->line(__('notifications.order_completed.come_back'))
+            ->salutation(__('notifications.order_completed.signature'));
     }
 
     /**

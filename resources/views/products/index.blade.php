@@ -2,12 +2,12 @@
     <x-slot name="header">
         <div class="flex justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Товары') }}
+                {{ __('products.title') }}
             </h2>
             @auth
                 @if (auth()->user()->isAdmin())
                     <x-primary-button onclick="window.location='{{ route('products.create') }}'">
-                        {{ __('Добавить товар') }}
+                        {{ __('products.add_product') }}
                     </x-primary-button>
                 @endif
             @endauth
@@ -16,23 +16,20 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Фильтры -->
+            <!-- Filters -->
             <div class="bg-white p-6 mb-6 rounded-lg shadow">
                 <form method="GET" action="{{ route('products.index') }}" class="space-y-6">
-                    <!-- Верхняя секция фильтров -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Левая колонка - Категории -->
+                        <!-- Categories -->
                         <div>
                             <div x-data="{
                                 open: false,
                                 selected: {{ json_encode(request('categories', [])) }}
                             }" class="relative">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Категории</label>
-                                <!-- Обновленная кнопка категорий с выровненной иконкой -->
+                                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('products.categories') }}</label>
                                 <button @click="open = !open" type="button"
                                     class="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 relative">
-                                    <span
-                                        x-text="selected.length ? `Выбрано: ${selected.length}` : 'Выберите категории'"
+                                    <span x-text="selected.length ? '{{ __('products.selected_count') }}'.replace(':count', selected.length) : '{{ __('products.select_categories') }}'"
                                         class="block pr-8"></span>
                                     <span class="absolute top-1/2 right-3 transform -translate-y-1/2">
                                         <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
@@ -61,19 +58,17 @@
                             </div>
                         </div>
 
-                        <!-- Центральная колонка - Цены -->
+                        <!-- Price Range -->
                         <div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label for="price_from" class="block text-sm font-medium text-gray-700 mb-2">Цена
-                                        от</label>
+                                    <label for="price_from" class="block text-sm font-medium text-gray-700 mb-2">{{ __('products.price_from') }}</label>
                                     <input type="number" name="price_from" id="price_from" min="0"
                                         value="{{ request('price_from') }}"
                                         class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 </div>
                                 <div>
-                                    <label for="price_to" class="block text-sm font-medium text-gray-700 mb-2">Цена
-                                        до</label>
+                                    <label for="price_to" class="block text-sm font-medium text-gray-700 mb-2">{{ __('products.price_to') }}</label>
                                     <input type="number" name="price_to" id="price_to" min="0"
                                         value="{{ request('price_to') }}"
                                         class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
@@ -81,52 +76,44 @@
                             </div>
                         </div>
 
-                        <!-- Правая колонка - Сортировка -->
+                        <!-- Sorting -->
                         <div>
-                            <label for="sort"
-                                class="block text-sm font-medium text-gray-700 mb-2">Сортировка</label>
+                            <label for="sort" class="block text-sm font-medium text-gray-700 mb-2">{{ __('products.sort') }}</label>
                             <select name="sort" id="sort"
                                 class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>По
-                                    названию (А-Я)</option>
-                                <option value="name_desc" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>По
-                                    названию (Я-А)</option>
-                                <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>По
-                                    цене (возрастание)</option>
-                                <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>По
-                                    цене (убывание)</option>
-                                <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Сначала
-                                    новые</option>
-                                <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Сначала
-                                    старые</option>
+                                @foreach(['name_asc', 'name_desc', 'price_asc', 'price_desc', 'newest', 'oldest'] as $sortOption)
+                                    <option value="{{ $sortOption }}" {{ request('sort') == $sortOption ? 'selected' : '' }}>
+                                        {{ __("products.sort_options.{$sortOption}") }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
 
-                    <!-- Нижняя секция - Кнопки -->
+                    <!-- Filter Actions -->
                     <div class="flex justify-between items-center pt-4 border-t">
                         <div class="flex items-center">
                             <input type="checkbox" name="in_stock" id="in_stock" value="1"
                                 {{ request('in_stock') ? 'checked' : '' }}
                                 class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                             <label for="in_stock" class="ml-2 text-sm text-gray-600">
-                                Только в наличии
+                                {{ __('products.in_stock_only') }}
                             </label>
                         </div>
                         <div class="flex space-x-4">
                             <a href="{{ route('products.index') }}"
                                 class="inline-flex items-center px-4 py-2 bg-gray-300 border border-transparent rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-400 focus:bg-gray-400 active:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                Сбросить фильтры
+                                {{ __('products.reset_filters') }}
                             </a>
                             <x-primary-button type="submit">
-                                Применить фильтры
+                                {{ __('products.apply_filters') }}
                             </x-primary-button>
                         </div>
                     </div>
                 </form>
             </div>
 
-            <!-- Список товаров -->
+            <!-- Product List -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 @foreach ($products as $product)
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -179,12 +166,12 @@
                                         @if($product->has_sizes)
                                             <a href="{{ route('products.show', $product) }}" 
                                                class="inline-flex items-center px-4 py-2 bg-primary hover:bg-primary-dark border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest transition ease-in-out duration-150">
-                                                Выбрать размер
+                                                {{ __('products.select_size') }}
                                             </a>
                                         @else
                                             <form action="{{ route('cart.add', $product) }}" method="POST">
                                                 @csrf
-                                                <x-primary-button>В корзину</x-primary-button>
+                                                <x-primary-button>{{ __('products.add_to_cart') }}</x-primary-button>
                                             </form>
                                         @endif
                                     @endauth
@@ -193,12 +180,12 @@
                                     @if (auth()->user()->isAdmin())
                                         <div class="mt-2 flex space-x-2 justify-end">
                                             <a href="{{ route('products.edit', $product) }}"
-                                                class="text-indigo-600 hover:text-indigo-900 font-bold">Изменить</a>
+                                                class="text-indigo-600 hover:text-indigo-900 font-bold">{{ __('products.edit') }}</a>
                                             <form action="{{ route('products.destroy', $product) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
-                                                    class="text-red-600 hover:text-red-900 font-bold">Удалить</button>
+                                                    class="text-red-600 hover:text-red-900 font-bold">{{ __('products.delete') }}</button>
                                             </form>
                                         </div>
                                     @endif

@@ -2,12 +2,12 @@
     <x-slot name="header">
         <div class="flex justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Категории') }}
+                {{ __('categories.categories') }}
             </h2>
             @auth
                 @if (auth()->user()->isAdmin())
                     <x-primary-button onclick="window.location='{{ route('categories.create') }}'">
-                        {{ __('Добавить категорию') }}
+                        {{ __('categories.create') }}
                     </x-primary-button>
                 @endif
             @endauth
@@ -25,19 +25,19 @@
                             <div class="mt-4">
                                 <a href="{{ route('categories.show', $category->slug) }}"
                                     class="text-red-600 hover:text-red-900">
-                                    Просмотреть продукты
+                                    {{ __('categories.view_products') }} 
                                 </a>
                             </div>
                             @auth
                                 @if (auth()->user()->isAdmin())
                                     <div class="mt-4 flex space-x-2 justify-end">
                                         <a href="{{ route('categories.edit', $category) }}"
-                                            class="text-indigo-600 hover:text-indigo-900 font-bold">Изменить</a>
+                                            class="text-indigo-600 hover:text-indigo-900 font-bold">{{ __('categories.edit_category') }}</a>
                                         <form action="{{ route('categories.destroy', $category) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                class="text-red-600 hover:text-red-900 font-bold">Удалить</button>
+                                                class="text-red-600 hover:text-red-900 font-bold">{{ __('categories.delete_category') }}</button>
                                         </form>
                                     </div>
                                 @endif

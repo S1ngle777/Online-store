@@ -45,4 +45,12 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($request->session()->has('locale')) {
+            app()->setLocale($request->session()->get('locale'));
+        }
+        return parent::render($request, $exception);
+    }
 }

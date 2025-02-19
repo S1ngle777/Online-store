@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Редактирование поста') }}
+            {{ __('blog.edit_post') }}
         </h2>
     </x-slot>
 
@@ -14,7 +14,7 @@
                         @method('PUT')
 
                         <div>
-                            <x-input-label for="title" :value="__('Заголовок')" />
+                            <x-input-label for="title" :value="__('blog.title')" />
                             <x-text-input id="title" 
                                          class="block mt-1 w-full" 
                                          type="text" 
@@ -25,7 +25,7 @@
                         </div>
 
                         <div class="mt-4">
-                            <x-input-label for="content" :value="__('Содержание')" />
+                            <x-input-label for="content" :value="__('blog.content')" />
                             <textarea id="content"
                                     name="content"
                                     rows="10"
@@ -35,19 +35,27 @@
                         </div>
 
                         <div class="mt-4">
-                            <x-input-label for="image" :value="__('Изображение')" />
+                            <x-input-label for="image" :value="__('blog.image')" />
                             @if($post->image)
                                 <div class="mt-2 mb-4">
+                                    <p class="text-sm text-gray-600 mb-2">{{ __('blog.current_image') }}:</p>
                                     <img src="{{ Storage::url($post->image) }}" 
                                          alt="{{ $post->title }}" 
                                          class="w-48 h-32 object-cover rounded">
                                 </div>
                             @endif
-                            <input type="file" 
-                                   id="image" 
-                                   name="image" 
-                                   class="mt-1"
-                                   accept="image/*">
+                            <div class="relative">
+                                <input type="file" 
+                                       id="image" 
+                                       name="image" 
+                                       class="hidden"
+                                       accept="image/*"
+                                       onchange="updateFileName(this)">
+                                <label for="image" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150 cursor-pointer">
+                                    {{ __('blog.change_image') }}
+                                </label>
+                                <span id="file-name" class="ml-3 text-gray-600">{{ __('blog.no_file_selected') }}</span>
+                            </div>
                             <x-input-error :messages="$errors->get('image')" class="mt-2" />
                         </div>
 
@@ -58,13 +66,13 @@
                                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
                                        value="1"
                                        {{ $post->is_published ? 'checked' : '' }}>
-                                <span class="ml-2 text-sm text-gray-600">{{ __('Опубликован') }}</span>
+                                <span class="ml-2 text-sm text-gray-600">{{ __('blog.published') }}</span>
                             </label>
                         </div>
 
                         <div class="flex items-center justify-end mt-4">
                             <x-primary-button>
-                                {{ __('Сохранить изменения') }}
+                                {{ __('blog.save_changes') }}
                             </x-primary-button>
                         </div>
                     </form>
@@ -72,4 +80,11 @@
             </div>
         </div>
     </div>
+
+    <script>
+    function updateFileName(input) {
+        const fileName = input.files[0] ? input.files[0].name : "{{ __('blog.no_file_selected') }}";
+        document.getElementById('file-name').textContent = fileName;
+    }
+    </script>
 </x-app-layout>

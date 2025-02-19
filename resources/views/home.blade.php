@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Молдавские изделия ручной работы') }}
+            {{ __('home.title') }}
         </h2>
     </x-slot>
 
@@ -10,9 +10,9 @@
             <!-- Последние записи блога -->
             <div class="mb-12">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-bold">Наш блог</h3>
+                    <h3 class="text-2xl font-bold">{{ __('home.blog.title') }}</h3>
                     <a href="{{ route('blog.index') }}" class="text-primary hover:text-primary-dark">
-                        Все записи →
+                        {{ __('home.blog.all_posts') }} →
                     </a>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -31,7 +31,7 @@
                                     <span>{{ $post->published_at->format('d.m.Y') }}</span>
                                     <a href="{{ route('blog.show', $post) }}"
                                         class="text-primary hover:text-primary-dark">
-                                        Читать далее →
+                                        {{ __('home.blog.read_more') }} →
                                     </a>
                                 </div>
                             </div>
@@ -42,7 +42,7 @@
 
             <!-- Рекомендуемые категории -->
             <div class="mb-12">
-                <h3 class="text-2xl font-bold mb-6">Категории</h3>
+                <h3 class="text-2xl font-bold mb-6">{{ __('home.categories.title') }}</h3>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                     @foreach ($categories as $category)
                         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -51,7 +51,7 @@
                                 <p class="text-gray-600 mt-2">{{ Str::limit($category->description, 100) }}</p>
                                 <a href="{{ route('categories.show', $category) }}"
                                     class="mt-4 inline-block text-indigo-600 hover:text-indigo-900">
-                                    Просмотреть категорию →
+                                    {{ __('home.categories.view_category') }} →
                                 </a>
                             </div>
                         </div>
@@ -61,7 +61,7 @@
 
             <!-- Рекомендуемые продукты -->
             <div>
-                <h3 class="text-2xl font-bold mb-6">Рекомендуемые продукты</h3>
+                <h3 class="text-2xl font-bold mb-6">{{ __('home.products.title') }}</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     @foreach ($products as $product)
                         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -94,7 +94,7 @@
                                         @auth
                                             <form action="{{ route('cart.add', $product) }}" method="POST">
                                                 @csrf
-                                                <x-primary-button>В корзину</x-primary-button>
+                                                <x-primary-button>{{ __('home.products.add_to_cart') }}</x-primary-button>
                                             </form>
                                         @endauth
                                     </div>
@@ -107,115 +107,36 @@
 
             <!-- FAQ секция -->
             <div class="mt-12">
-                <h3 class="text-2xl font-bold mb-8 text-center">Часто задаваемые вопросы</h3>
+                <h3 class="text-2xl font-bold mb-8 text-center">{{ __('home.faq.title') }}</h3>
                 
                 <div class="max-w-3xl mx-auto space-y-4">
-                    <div x-data="{ open: false }" class="border rounded-lg overflow-hidden">
-                        <button @click="open = !open" 
-                                class="w-full flex items-center justify-between p-4 bg-white hover:bg-gray-50">
-                            <span class="font-medium">Как оформить заказ?</span>
-                            <svg class="w-5 h-5 transform transition-transform duration-200" 
-                                 :class="{ '-rotate-180': open }"
-                                 fill="none" 
-                                 stroke="currentColor" 
-                                 viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                            </svg>
-                        </button>
-                        <div x-show="open"
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 transform -translate-y-2"
-                             x-transition:enter-end="opacity-100 transform translate-y-0"
-                             x-transition:leave="transition ease-in duration-200"
-                             x-transition:leave-start="opacity-100 transform translate-y-0"
-                             x-transition:leave-end="opacity-0 transform -translate-y-2"
-                             class="p-4 bg-gray-50 border-t">
-                            <p class="text-gray-600">
-                                1. Добавьте товары в корзину<br>
-                                2. Перейдите в корзину и нажмите "Оформить заказ"<br>
-                                3. Заполните контактные данные и адрес доставки<br>
-                                4. Подтвердите заказ
-                            </p>
+                    @foreach(['how_to_order', 'payment_methods', 'delivery_time', 'return_policy'] as $faq)
+                        <div x-data="{ open: false }" class="border rounded-lg overflow-hidden">
+                            <button @click="open = !open" 
+                                    class="w-full flex items-center justify-between p-4 bg-white hover:bg-gray-50">
+                                <span class="font-medium">{{ __("home.faq.questions.{$faq}") }}</span>
+                                <svg class="w-5 h-5 transform transition-transform duration-200" 
+                                     :class="{ '-rotate-180': open }"
+                                     fill="none" 
+                                     stroke="currentColor" 
+                                     viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            <div x-show="open"
+                                 x-transition:enter="transition ease-out duration-200"
+                                 x-transition:enter-start="opacity-0 transform -translate-y-2"
+                                 x-transition:enter-end="opacity-100 transform translate-y-0"
+                                 x-transition:leave="transition ease-in duration-200"
+                                 x-transition:leave-start="opacity-100 transform translate-y-0"
+                                 x-transition:leave-end="opacity-0 transform -translate-y-2"
+                                 class="p-4 bg-gray-50 border-t">
+                                <p class="text-gray-600">
+                                    {!! nl2br(e(__("home.faq.answers.{$faq}"))) !!}
+                                </p>
+                            </div>
                         </div>
-                    </div>
-            
-                    <div x-data="{ open: false }" class="border rounded-lg overflow-hidden">
-                        <button @click="open = !open" 
-                                class="w-full flex items-center justify-between p-4 bg-white hover:bg-gray-50">
-                            <span class="font-medium">Какие способы оплаты доступны?</span>
-                            <svg class="w-5 h-5 transform transition-transform duration-200" 
-                                 :class="{ '-rotate-180': open }"
-                                 fill="none" 
-                                 stroke="currentColor" 
-                                 viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                            </svg>
-                        </button>
-                        <div x-show="open"
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 transform -translate-y-2"
-                             x-transition:enter-end="opacity-100 transform translate-y-0"
-                             x-transition:leave="transition ease-in duration-200"
-                             x-transition:leave-start="opacity-100 transform translate-y-0"
-                             x-transition:leave-end="opacity-0 transform -translate-y-2"
-                             class="p-4 bg-gray-50 border-t">
-                            <p class="text-gray-600">
-                                Мы принимаем оплату наличными при получении и банковскими картами через безопасную систему онлайн-платежей.
-                            </p>
-                        </div>
-                    </div>
-            
-                    <div x-data="{ open: false }" class="border rounded-lg overflow-hidden">
-                        <button @click="open = !open" 
-                                class="w-full flex items-center justify-between p-4 bg-white hover:bg-gray-50">
-                            <span class="font-medium">Как долго займет доставка?</span>
-                            <svg class="w-5 h-5 transform transition-transform duration-200" 
-                                 :class="{ '-rotate-180': open }"
-                                 fill="none" 
-                                 stroke="currentColor" 
-                                 viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                            </svg>
-                        </button>
-                        <div x-show="open"
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 transform -translate-y-2"
-                             x-transition:enter-end="opacity-100 transform translate-y-0"
-                             x-transition:leave="transition ease-in duration-200"
-                             x-transition:leave-start="opacity-100 transform translate-y-0"
-                             x-transition:leave-end="opacity-0 transform -translate-y-2"
-                             class="p-4 bg-gray-50 border-t">
-                            <p class="text-gray-600">
-                                Стандартная доставка по Кишинёву занимает 1-2 рабочих дня. Доставка в другие города Молдовы - 2-4 рабочих дня.
-                            </p>
-                        </div>
-                    </div>
-            
-                    <div x-data="{ open: false }" class="border rounded-lg overflow-hidden">
-                        <button @click="open = !open" 
-                                class="w-full flex items-center justify-between p-4 bg-white hover:bg-gray-50">
-                            <span class="font-medium">Возможен ли возврат товара?</span>
-                            <svg class="w-5 h-5 transform transition-transform duration-200" 
-                                 :class="{ '-rotate-180': open }"
-                                 fill="none" 
-                                 stroke="currentColor" 
-                                 viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                            </svg>
-                        </button>
-                        <div x-show="open"
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 transform -translate-y-2"
-                             x-transition:enter-end="opacity-100 transform translate-y-0"
-                             x-transition:leave="transition ease-in duration-200"
-                             x-transition:leave-start="opacity-100 transform translate-y-0"
-                             x-transition:leave-end="opacity-0 transform -translate-y-2"
-                             class="p-4 bg-gray-50 border-t">
-                            <p class="text-gray-600">
-                                Да, возврат возможен в течение 14 дней с момента получения товара, при условии сохранения его товарного вида и потребительских свойств.
-                            </p>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>

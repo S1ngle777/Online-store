@@ -1,0 +1,41 @@
+<?php
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Authentication Language Lines
+    |--------------------------------------------------------------------------
+    |
+    | The following language lines are used during authentication for various
+    | messages that we need to display to the user. You are free to modify
+    | these language lines according to your application's requirements.
+    |
+    */
+
+    'failed' => 'These credentials do not match our records.',
+    'password' => 'The provided password is incorrect.',
+    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+
+    'confirm_password' => 'Это защищенная область приложения. Пожалуйста, подтвердите свой пароль, прежде чем продолжить.',
+    'password_reset_request' => 'Забыли пароль? Не проблема. Просто сообщите нам свой адрес электронной почты, и мы отправим вам ссылку для сброса пароля, которая позволит вам выбрать новый.',
+    'password_updated' => 'Ваш пароль был успешно обновлен.',
+    'account_locked' => 'Ваш аккаунт был заблокирован. Пожалуйста, свяжитесь с поддержкой.',
+    'remember_me' => 'Запомнить меня',
+    'login' => 'Войти',
+    'forgot_password' => 'Забыли пароль?',
+    'register' => 'Регистрация',
+    'logout' => 'Выйти',
+    'email' => 'Почта',
+    'password_value' => 'Пароль',
+    'password_confirm' => 'Подтвердите пароль',
+    'name' => 'Имя',
+    'already_registered' => 'Уже зарегистрированы?',
+    'confirm_register' => 'Зарегистрироваться',
+    'reset_password' => 'Сбросить пароль',
+    'verify_email_message' => 'Спасибо за регистрацию! Прежде чем начать, не могли бы вы подтвердить свой адрес электронной почты, нажав на ссылку, которую мы только что отправили вам по электронной почте? Если вы не получили письмо, мы с радостью отправим вам еще одно',
+    'verification_link_sent_message' => 'Подтвердите свой адрес электронной почты',
+    'password_reset_link_sent' => 'Отправить ссылку для сброса пароля',
+
+
+];

@@ -9,6 +9,17 @@ export default {
         './resources/views/**/*.blade.php',
     ],
 
+    safelist: [
+        'bg-yellow-100',
+        'bg-blue-100',
+        'bg-green-100',
+        'bg-red-100',
+        'text-yellow-800',
+        'text-blue-800',
+        'text-green-800',
+        'text-red-800',
+    ],
+
     theme: {
         extend: {
             fontFamily: {

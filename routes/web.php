@@ -98,4 +98,11 @@ Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/blog', [PostController::class, 'index'])->name('blog.index');
 Route::get('/blog/{post:slug}', [PostController::class, 'show'])->name('blog.show');
 
+Route::get('language/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'ru', 'ro'])) {
+        session()->put('locale', $locale);
+    }
+    return redirect()->back();
+})->name('language');
+
 require __DIR__.'/auth.php';
