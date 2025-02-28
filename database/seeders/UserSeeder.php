@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'Nikita',
-            'email' => 'nikita@gmal.com',
+            'email' => 'nikita@gmail.com',
             'password' => '$2y$10$t22vhoB5KBn8cPV/atbqYOlxY5SytBpVgyTJK1YIcrM.igizjSZg6',
             'role' => 'user',
             'created_at' => '2024-12-04 00:24:19',
