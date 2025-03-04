@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             OrderItemSeeder::class,
             DeliveryMethodSeeder::class,
             SizeSeeder::class,
+            PostSeeder::class,
         ]);
     }
 }

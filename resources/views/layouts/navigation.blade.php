@@ -155,7 +155,7 @@
     <!-- Мобильное меню -->
     <div :class="{ 'block': open, 'hidden': !open }" class="lg:hidden">
         <!-- Форма поиска для мобильных устройств -->
-        <div class="pt-2 px-4">
+        <div class="p-2 px-4">
             <form action="{{ route('search') }}" method="GET" class="flex items-center">
                 <input type="text" name="query" placeholder="Поиск..." value="{{ request('query') }}"
                     class="w-full h-9 rounded-l-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
