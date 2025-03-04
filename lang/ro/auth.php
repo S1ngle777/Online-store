@@ -12,10 +12,10 @@ return [
     | these language lines according to your application's requirements.
     |
     */
-
-    'failed' => 'These credentials do not match our records.',
-    'password' => 'The provided password is incorrect.',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'confirm' => 'Confirmă',
+    'failed' => 'Aceste credențiale nu se potrivesc cu înregistrările noastre.',
+    'password' => 'Parola introdusă este incorectă.',
+    'throttle' => 'Prea multe încercări de autentificare. Vă rugăm să încercați din nou în :seconds secunde.',
 
     'confirm_password' => 'Aceasta este o zonă securizată a aplicației. Vă rugăm să confirmați parola înainte de a continua.',
     'password_reset_request' => 'Ați uitat parola? Nicio problemă. Introduceți adresa de email și vă vom trimite un link pentru resetarea parolei.',

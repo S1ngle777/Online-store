@@ -13,9 +13,10 @@ return [
     |
     */
 
-    'failed' => 'These credentials do not match our records.',
-    'password' => 'The provided password is incorrect.',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'confirm'=> 'Подтвердить',
+    'failed' => 'Эти учетные данные не соответствуют нашим записям.',
+    'password' => 'Указанный пароль неверен.',
+    'throttle' => 'Слишком много попыток входа. Пожалуйста, попробуйте снова через :seconds секунд.',
 
     'confirm_password' => 'Это защищенная область приложения. Пожалуйста, подтвердите свой пароль, прежде чем продолжить.',
     'password_reset_request' => 'Забыли пароль? Не проблема. Просто сообщите нам свой адрес электронной почты, и мы отправим вам ссылку для сброса пароля, которая позволит вам выбрать новый.',
