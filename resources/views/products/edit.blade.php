@@ -13,21 +13,61 @@
                         @csrf
                         @method('PUT')
 
-                        <div>
-                            <x-input-label for="name" :value="__('products.name')" />
-                            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name', $product->name)" required autofocus />
-                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                        <!-- Название товара - Многоязычное -->
+                        <div class="mb-6">
+                            <x-input-label :value="__('products.name')" />
+                            
+                            <div class="mb-2">
+                                <div class="flex border-b border-gray-200">
+                                    <button type="button" class="px-4 py-2 border-b-2 border-indigo-500 text-indigo-500 lang-tab" onclick="switchLanguageTab('name', 'ru')">Русский</button>
+                                    <button type="button" class="px-4 py-2 text-gray-500 hover:text-indigo-500 lang-tab" onclick="switchLanguageTab('name', 'ro')">Română</button>
+                                    <button type="button" class="px-4 py-2 text-gray-500 hover:text-indigo-500 lang-tab" onclick="switchLanguageTab('name', 'en')">English</button>
+                                </div>
+                            </div>
+
+                            <div id="name_ru_container" class="lang-content">
+                                <x-text-input id="name_ru" class="block mt-1 w-full" type="text" name="name_ru" :value="old('name_ru', $product->getTranslation('name', 'ru', false))" required autofocus placeholder="Название на русском" />
+                                <x-input-error :messages="$errors->get('name_ru')" class="mt-2" />
+                            </div>
+                            <div id="name_ro_container" class="lang-content hidden">
+                                <x-text-input id="name_ro" class="block mt-1 w-full" type="text" name="name_ro" :value="old('name_ro', $product->getTranslation('name', 'ro', false))" required placeholder="Denumire în română" />
+                                <x-input-error :messages="$errors->get('name_ro')" class="mt-2" />
+                            </div>
+                            <div id="name_en_container" class="lang-content hidden">
+                                <x-text-input id="name_en" class="block mt-1 w-full" type="text" name="name_en" :value="old('name_en', $product->getTranslation('name', 'en', false))" required placeholder="English name" />
+                                <x-input-error :messages="$errors->get('name_en')" class="mt-2" />
+                            </div>
                         </div>
 
-                        <div class="mt-4">
-                            <x-input-label for="description" :value="__('products.description')" />
-                            <textarea id="description" name="description" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="4">{{ old('description', $product->description) }}</textarea>
-                            <x-input-error :messages="$errors->get('description')" class="mt-2" />
+                        <!-- Описание товара - Многоязычное -->
+                        <div class="mb-6">
+                            <x-input-label :value="__('products.description')" />
+                            
+                            <div class="mb-2">
+                                <div class="flex border-b border-gray-200">
+                                    <button type="button" class="px-4 py-2 border-b-2 border-indigo-500 text-indigo-500 lang-tab" onclick="switchLanguageTab('description', 'ru')">Русский</button>
+                                    <button type="button" class="px-4 py-2 text-gray-500 hover:text-indigo-500 lang-tab" onclick="switchLanguageTab('description', 'ro')">Română</button>
+                                    <button type="button" class="px-4 py-2 text-gray-500 hover:text-indigo-500 lang-tab" onclick="switchLanguageTab('description', 'en')">English</button>
+                                </div>
+                            </div>
+
+                            <div id="description_ru_container" class="lang-content">
+                                <textarea id="description_ru" name="description_ru" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="4" placeholder="Описание на русском">{{ old('description_ru', $product->getTranslation('description', 'ru', false)) }}</textarea>
+                                <x-input-error :messages="$errors->get('description_ru')" class="mt-2" />
+                            </div>
+                            <div id="description_ro_container" class="lang-content hidden">
+                                <textarea id="description_ro" name="description_ro" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="4" placeholder="Descriere în română">{{ old('description_ro', $product->getTranslation('description', 'ro', false)) }}</textarea>
+                                <x-input-error :messages="$errors->get('description_ro')" class="mt-2" />
+                            </div>
+                            <div id="description_en_container" class="lang-content hidden">
+                                <textarea id="description_en" name="description_en" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="4" placeholder="English description">{{ old('description_en', $product->getTranslation('description', 'en', false)) }}</textarea>
+                                <x-input-error :messages="$errors->get('description_en')" class="mt-2" />
+                            </div>
                         </div>
 
                         <div class="mt-4">
                             <x-input-label for="price" :value="__('products.price')" />
-                            <x-text-input id="price" class="block mt-1 w-full" type="number" name="price" step="1" :value="old('price', $product->price)" required />
+                            <x-text-input id="price" class="block mt-1 w-full" type="number" name="price" step="0.01" :value="old('price', $product->price)" required />
                             <x-input-error :messages="$errors->get('price')" class="mt-2" />
                         </div>
 
@@ -101,9 +141,11 @@
                         <div class="mt-4">
                             <label class="inline-flex items-center">
                                 <input type="checkbox" 
+                                       id="has_sizes_checkbox"
                                        name="has_sizes" 
-                                       class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                       value="1"
                                        {{ $product->has_sizes ? 'checked' : '' }}
+                                       class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                        onchange="document.getElementById('sizes-input').style.display = this.checked ? 'block' : 'none'">
                                 <span class="ml-2 text-sm text-gray-600">{{ __('products.has_sizes') }}</span>
                             </label>
@@ -111,7 +153,7 @@
 
                         <!-- Секция размеров -->
                         <div id="sizes-input" class="mt-4" style="display: {{ $product->has_sizes ? 'block' : 'none' }}">
-                            <x-input-label value="{{ __('products.sizes_and_quantity') }}" class="mb-3"/>
+                            <x-input-label :value="__('products.sizes_and_quantity')" class="mb-3"/>
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                 @foreach(App\Models\Size::where('type', 'clothing')->get() as $size)
                                     <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-indigo-500 transition-colors {{ $product->sizes->contains($size->id) ? 'border-indigo-500 ring-2 ring-indigo-500/20' : '' }}">
@@ -151,6 +193,30 @@
     function updateFileName(input) {
         const fileName = input.files[0] ? input.files[0].name : "{{ __('products.no_file_selected') }}";
         document.getElementById('file-name').textContent = fileName;
+    }
+
+    function switchLanguageTab(fieldName, lang) {
+        // Скрыть все контейнеры с содержимым для этого поля
+        document.querySelectorAll(`[id^="${fieldName}_"][id$="_container"]`).forEach(el => {
+            el.classList.add('hidden');
+        });
+        
+        // Показать содержимое выбранного языка
+        document.getElementById(`${fieldName}_${lang}_container`).classList.remove('hidden');
+        
+        // Найти родительский контейнер с вкладками
+        const parentDiv = document.getElementById(`${fieldName}_${lang}_container`).closest('.mb-6').querySelector('.flex');
+        
+        // Сбросить все вкладки в неактивное состояние
+        parentDiv.querySelectorAll('button').forEach(tab => {
+            tab.classList.remove('border-b-2', 'border-indigo-500', 'text-indigo-500');
+            tab.classList.add('text-gray-500', 'hover:text-indigo-500');
+        });
+        
+        // Установить активную вкладку
+        const activeTab = parentDiv.querySelector(`[onclick="switchLanguageTab('${fieldName}', '${lang}')"]`);
+        activeTab.classList.remove('text-gray-500', 'hover:text-indigo-500');
+        activeTab.classList.add('border-b-2', 'border-indigo-500', 'text-indigo-500');
     }
     </script>
 </x-app-layout>

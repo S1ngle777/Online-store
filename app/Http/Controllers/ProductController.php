@@ -88,8 +88,9 @@ class ProductController extends Controller
 
     public function create()
     {
+        $product = new Product();
         $categories = Category::all();
-        return view('products.create', compact('categories'));
+        return view('products.create', compact('product', 'categories'));
     }
 
     public function store(Request $request)
@@ -97,32 +98,62 @@ class ProductController extends Controller
         try {
             \DB::beginTransaction();
 
-            $has_sizes = $request->has('has_sizes');
-
             $validated = $request->validate([
-                'name' => 'required|max:255',
-                'description' => 'required',
+                'name_ru' => 'required|string|max:255',
+                'name_ro' => 'required|string|max:255',
+                'name_en' => 'required|string|max:255',
+                'description_ru' => 'required|string',
+                'description_ro' => 'required|string',
+                'description_en' => 'required|string',
                 'price' => 'required|numeric|min:0',
-                'stock' => 'required|integer|min:0',
+                'stock' => 'required_without:has_sizes|nullable|integer|min:0',
+                'has_sizes' => 'boolean',
                 'category_id' => 'required|exists:categories,id',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'image' => 'required|image|max:2048',
+                'sizes' => 'array|required_if:has_sizes,1',
+                'size_stocks' => 'array|required_if:has_sizes,1',
                 'discount' => 'nullable|numeric|min:0|max:100',
-                'discount_ends_at' => 'nullable|date'
+                'discount_ends_at' => 'nullable|date',
             ]);
 
-            $validated['has_sizes'] = $has_sizes;
-            $validated['slug'] = Str::slug($validated['name']);
+            $has_sizes = $request->boolean('has_sizes');
 
+            // Обработка изображения
             if ($request->hasFile('image')) {
-                $validated['image'] = $request->file('image')->store('products', 'public');
+                $path = $request->file('image')->store('products', 'public');
             }
 
-            $product = Product::create($validated);
+            // Создаем продукт с нетранслируемыми данными
+            $product = new Product();
+            $product->slug = \Str::slug($request->input('name_en'));
+            $product->price = $validated['price'];
+            $product->stock = $has_sizes ? 0 : $validated['stock'];
+            $product->has_sizes = $has_sizes;
+            $product->category_id = $validated['category_id'];
+            $product->image = $path;
 
+            // Добавляем скидку если есть
+            if (isset($validated['discount']) && $validated['discount'] > 0) {
+                $product->discount = $validated['discount'];
+                $product->discount_ends_at = $validated['discount_ends_at'];
+            }
+
+            // Добавляем переводы
+            $product->setTranslation('name', 'ru', $request->input('name_ru'));
+            $product->setTranslation('name', 'ro', $request->input('name_ro'));
+            $product->setTranslation('name', 'en', $request->input('name_en'));
+
+            $product->setTranslation('description', 'ru', $request->input('description_ru'));
+            $product->setTranslation('description', 'ro', $request->input('description_ro'));
+            $product->setTranslation('description', 'en', $request->input('description_en'));
+
+            $product->save();
+
+            // Обработка размеров (если есть)
             if ($has_sizes) {
                 $sizes = $request->input('sizes', []);
                 $stocks = $request->input('size_stocks', []);
-                
+
                 // Подготовить данные размеров с запасами
                 $sizesData = [];
                 foreach ($sizes as $sizeId) {
@@ -130,10 +161,10 @@ class ProductController extends Controller
                         $sizesData[$sizeId] = ['stock' => $stocks[$sizeId]];
                     }
                 }
-                
+
                 // Синхронизировать размеры с их запасами
                 $product->sizes()->sync($sizesData);
-                
+
                 // Обновить общую запас как сумму всех запасов по размерам
                 $product->update([
                     'stock' => array_sum(array_values($stocks))
@@ -164,51 +195,78 @@ class ProductController extends Controller
             \DB::beginTransaction();
 
             $validated = $request->validate([
-                'name' => 'required|max:255',
-                'description' => 'required',
+                'name_ru' => 'required|string|max:255',
+                'name_ro' => 'required|string|max:255',
+                'name_en' => 'required|string|max:255',
+                'description_ru' => 'required|string',
+                'description_ro' => 'required|string',
+                'description_en' => 'required|string',
                 'price' => 'required|numeric|min:0',
-                'stock' => 'required|integer|min:0',
+                'stock' => 'required_without:has_sizes|nullable|integer|min:0',
+                'has_sizes' => 'boolean',
                 'category_id' => 'required|exists:categories,id',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'image' => 'nullable|image|max:2048',
                 'discount' => 'nullable|numeric|min:0|max:100',
                 'discount_ends_at' => 'nullable|date',
             ]);
 
-            $validated['has_sizes'] = $request->has('has_sizes'); 
-            $validated['slug'] = Str::slug($validated['name']);
+            $has_sizes = $request->boolean('has_sizes');
+
+            // Обновляем slug на основе английского имени
+            $product->slug = \Str::slug($request->input('name_en'));
+
+            // Обновляем нетранслируемые поля
+            $product->price = $validated['price'];
+            $product->has_sizes = $has_sizes;
+            $product->category_id = $validated['category_id'];
+
+            if (!$has_sizes) {
+                $product->stock = $validated['stock'];
+            }
 
             // Обработка загрузки изображения
             if ($request->hasFile('image')) {
                 if ($product->image) {
                     Storage::disk('public')->delete($product->image);
                 }
-                $validated['image'] = $request->file('image')->store('products', 'public');
+                $product->image = $request->file('image')->store('products', 'public');
             }
 
             // Обработка скидки
-            if (!isset($validated['discount'])) {
-                $validated['discount'] = null;
-                $validated['discount_ends_at'] = null;
+            if (isset($validated['discount']) && $validated['discount'] > 0) {
+                $product->discount = $validated['discount'];
+                $product->discount_ends_at = $validated['discount_ends_at'];
+            } else {
+                $product->discount = null;
+                $product->discount_ends_at = null;
             }
 
-            // Обновить основную информацию о товаре
-            $product->update($validated);
+            // Обновляем переводы
+            $product->setTranslation('name', 'ru', $request->input('name_ru'));
+            $product->setTranslation('name', 'ro', $request->input('name_ro'));
+            $product->setTranslation('name', 'en', $request->input('name_en'));
+
+            $product->setTranslation('description', 'ru', $request->input('description_ru'));
+            $product->setTranslation('description', 'ro', $request->input('description_ro'));
+            $product->setTranslation('description', 'en', $request->input('description_en'));
+
+            $product->save();
 
             // Обработать размеры, если включено
-            if ($validated['has_sizes']) {
+            if ($has_sizes) {
                 $sizesData = [];
                 $sizes = $request->input('sizes', []);
                 $sizeStocks = $request->input('size_stocks', []);
-                
+
                 foreach ($sizes as $sizeId) {
                     if (isset($sizeStocks[$sizeId])) {
                         $sizesData[$sizeId] = ['stock' => $sizeStocks[$sizeId]];
                     }
                 }
-                
+
                 // Синхронизировать размеры с их запасами
                 $product->sizes()->sync($sizesData);
-                
+
                 // Обновить общую запас как сумму всех запасов по размерам
                 $product->update([
                     'stock' => array_sum($sizesData ? array_column($sizesData, 'stock') : [0])
@@ -235,9 +293,9 @@ class ProductController extends Controller
         if ($product->image) {
             Storage::disk('public')->delete($product->image);
         }
-        
+
         $product->delete();
-        
+
         return redirect()->route('products.index')
             ->with('success', __('products.deleted_successfully'));
     }

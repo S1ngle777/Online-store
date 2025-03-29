@@ -16,9 +16,17 @@ class ProductSeeder extends Seeder
         $products = [
             [
                 'id' => 2,
-                'name' => 'Брошь "Молдавский узор"',
+                'name' => [
+                    'en' => 'Brooch "Moldovan Pattern"',
+                    'ro' => 'Broșă "Model Moldovenesc"',
+                    'ru' => 'Брошь "Молдавский узор"'
+                ],
                 'slug' => 'bros-moldavskii-uzor',
-                'description' => 'Handmade брошь с традиционным молдавским орнаментом, выполненная из бисера и металла',
+                'description' => [
+                    'en' => 'Handmade brooch with traditional Moldovan ornament, made of beads and metal',
+                    'ro' => 'Broșă handmade cu ornament tradițional moldovenesc, realizată din mărgele și metal',
+                    'ru' => 'Handmade брошь с традиционным молдавским орнаментом, выполненная из бисера и металла'
+                ],
                 'price' => 350,
                 'stock' => 7,
                 'category_id' => 2,
@@ -29,9 +37,17 @@ class ProductSeeder extends Seeder
 
             [
                 'id' => 3,
-                'name' => 'Серьги "Виноградная лоза"',
+                'name' => [
+                    'en' => 'Earrings "Grape Vine"',
+                    'ro' => 'Cercei "Viță de Vie"',
+                    'ru' => 'Серьги "Виноградная лоза"'
+                ],
                 'slug' => 'sergi-vinogradnaia-loza',
-                'description' => 'Серьги ручной работы в виде виноградной лозы из серебра 925 пробы',
+                'description' => [
+                    'en' => 'Handmade grape vine-shaped earrings made of 925 sterling silver',
+                    'ro' => 'Cercei lucrati manual în formă de viță de vie din argint 925',
+                    'ru' => 'Серьги ручной работы в виде виноградной лозы из серебра 925 пробы'
+                ],
                 'price' => 450,
                 'stock' => 2,
                 'category_id' => 2,
@@ -41,9 +57,17 @@ class ProductSeeder extends Seeder
             ],
             [
                 'id' => 4,
-                'name' => 'Скатерть "Молдавское наследие"',
+                'name' => [
+                    'en' => 'Tablecloth "Moldovan Heritage"',
+                    'ro' => 'Față de Masă "Patrimoniu Moldovenesc"',
+                    'ru' => 'Скатерть "Молдавское наследие"'
+                ],
                 'slug' => 'skatert-moldavskoe-nasledie',
-                'description' => 'Большая скатерть с традиционной молдавской вышивкой, 150x250 см',
+                'description' => [
+                    'en' => 'Large tablecloth with traditional Moldovan embroidery, 150x250 cm',
+                    'ro' => 'Față de masă mare cu broderie tradițională moldovenească, 150x250 cm',
+                    'ru' => 'Большая скатерть с традиционной молдавской вышивкой, 150x250 см'
+                ],
                 'price' => 1200,
                 'stock' => 3,
                 'category_id' => 3,
@@ -53,9 +77,17 @@ class ProductSeeder extends Seeder
             ],
             [
                 'id' => 5,
-                'name' => 'Рушник "Древо жизни"',
+                'name' => [
+                    'en' => 'Towel "Tree of Life"',
+                    'ro' => 'Prosop "Pomul Vieții"',
+                    'ru' => 'Рушник "Древо жизни"'
+                ],
                 'slug' => 'rusnik-drevo-zizni',
-                'description' => 'Декоративное полотенце с вышитым узором древа жизни',
+                'description' => [
+                    'en' => 'Decorative towel with embroidered tree of life pattern',
+                    'ro' => 'Prosop decorativ cu model brodat de pomul vieții',
+                    'ru' => 'Декоративное полотенце с вышитым узором древа жизни'
+                ],
                 'price' => 580,
                 'stock' => 8,
                 'category_id' => 3,
@@ -66,9 +98,17 @@ class ProductSeeder extends Seeder
 
             [
                 'id' => 6,
-                'name' => 'Кувшин "Молдавский дом"',
+                'name' => [
+                    'en' => 'Jug "Moldovan Home"',
+                    'ro' => 'Ulcior "Casa Moldovenească"',
+                    'ru' => 'Кувшин "Молдавский дом"'
+                ],
                 'slug' => 'kuvsin-moldavskii-dom',
-                'description' => 'Керамический кувшин с ручной росписью, изображающей традиционный молдавский дом',
+                'description' => [
+                    'en' => 'Ceramic jug with hand-painted traditional Moldovan house',
+                    'ro' => 'Ulcior ceramic cu casă tradițională moldovenească pictată manual',
+                    'ru' => 'Керамический кувшин с ручной росписью, изображающей традиционный молдавский дом'
+                ],
                 'price' => 890,
                 'stock' => 4,
                 'category_id' => 4,
@@ -78,9 +118,17 @@ class ProductSeeder extends Seeder
             ],
             [
                 'id' => 7,
-                'name' => 'Тарелка "Национальные мотивы"',
+                'name' => [
+                    'en' => 'Plate "National Motifs"',
+                    'ro' => 'Farfurie "Motive Naționale"',
+                    'ru' => 'Тарелка "Национальные мотивы"'
+                ],
                 'slug' => 'tarelka-nacionalnye-motivy',
-                'description' => 'Декоративная тарелка с традиционным молдавским орнаментом',
+                'description' => [
+                    'en' => 'Decorative plate with traditional Moldovan ornament',
+                    'ro' => 'Farfurie decorativă cu ornament tradițional moldovenesc',
+                    'ru' => 'Декоративная тарелка с традиционным молдавским орнаментом'
+                ],
                 'price' => 450,
                 'stock' => 15,
                 'category_id' => 4,
@@ -90,9 +138,17 @@ class ProductSeeder extends Seeder
             ],
             [
                 'id' => 8,
-                'name' => 'Шкатулка "Молдавские узоры"',
+                'name' => [
+                    'en' => 'Box "Moldovan Patterns"',
+                    'ro' => 'Casetă "Modele Moldovenești"',
+                    'ru' => 'Шкатулка "Молдавские узоры"'
+                ],
                 'slug' => 'skatulka-moldavskie-uzory',
-                'description' => 'Резная деревянная шкатулка с традиционными молдавскими орнаментами',
+                'description' => [
+                    'en' => 'Carved wooden box with traditional Moldovan ornaments',
+                    'ro' => 'Cutie sculptată din lemn cu ornamente tradiționale moldovenești',
+                    'ru' => 'Резная деревянная шкатулка с традиционными молдавскими орнаментами'
+                ],
                 'price' => 750,
                 'stock' => 6,
                 'category_id' => 5,
@@ -103,9 +159,17 @@ class ProductSeeder extends Seeder
 
             [
                 'id' => 9,
-                'name' => 'Рама "Виноградник"',
+                'name' => [
+                    'en' => 'Frame "Vineyard"',
+                    'ro' => 'Rama "Via"',
+                    'ru' => 'Рама "Виноградник"'
+                ],
                 'slug' => 'rama-vinogradnik',
-                'description' => 'Резная деревянная рама для фотографий с мотивами виноградной лозы',
+                'description' => [
+                    'en' => 'Carved wooden photo frame with grape vine motifs',
+                    'ro' => 'Ramă foto sculptată din lemn cu motive de viță de vie',
+                    'ru' => 'Резная деревянная рама для фотографий с мотивами виноградной лозы'
+                ],
                 'price' => 420,
                 'stock' => 12,
                 'category_id' => 5,
@@ -115,9 +179,17 @@ class ProductSeeder extends Seeder
             ],
             [
                 'id' => 10,
-                'name' => 'Блузка ручной работы',
+                'name' => [
+                    'en' => 'Handmade Blouse',
+                    'ro' => 'Bluză Lucrată Manual',
+                    'ru' => 'Блузка ручной работы'
+                ],
                 'slug' => 'bluzka-rucnoi-raboty',
-                'description' => 'Традиционная молдавская блузка с ручной вышивкой',
+                'description' => [
+                    'en' => 'Traditional Moldovan blouse with hand embroidery',
+                    'ro' => 'Bluză tradițională moldovenească cu broderie manuală',
+                    'ru' => 'Традиционная молдавская блузка с ручной вышивкой'
+                ],
                 'price' => 2500,
                 'stock' => 3,
                 'category_id' => 6,
@@ -127,9 +199,17 @@ class ProductSeeder extends Seeder
             ],
             [
                 'id' => 11,
-                'name' => 'Магнит "Национальные символы"',
+                'name' => [
+                    'en' => 'Magnet "National Symbols"',
+                    'ro' => 'Magnet "Simboluri Naționale"',
+                    'ru' => 'Магнит "Национальные символы"'
+                ],
                 'slug' => 'magnit-nacionalnye-simvoly',
-                'description' => 'Керамический магнит с изображением национальных молдавских символов',
+                'description' => [
+                    'en' => 'Ceramic magnet depicting national Moldovan symbols',
+                    'ro' => 'Magnet ceramic cu simboluri naționale moldovenești',
+                    'ru' => 'Керамический магнит с изображением национальных молдавских символов'
+                ],
                 'price' => 120,
                 'stock' => 50,
                 'category_id' => 7,
@@ -140,9 +220,17 @@ class ProductSeeder extends Seeder
 
             [
                 'id' => 12,
-                'name' => 'Брелок "Молдавский герб"',
+                'name' => [
+                    'en' => 'Keychain "Moldovan Coat of Arms"',
+                    'ro' => 'Breloc "Stema Moldovei"',
+                    'ru' => 'Брелок "Молдавский герб"'
+                ],
                 'slug' => 'brelok-moldavskii-gerb',
-                'description' => 'Металлический брелок с гравировкой молдавского герба',
+                'description' => [
+                    'en' => 'Metal keychain with engraved Moldovan coat of arms',
+                    'ro' => 'Breloc metalic cu stema Moldovei gravată',
+                    'ru' => 'Металлический брелок с гравировкой молдавского герба'
+                ],
                 'price' => 250,
                 'stock' => 25,
                 'category_id' => 7,
@@ -150,9 +238,7 @@ class ProductSeeder extends Seeder
                 'created_at' => '2024-12-04 15:39:13',
                 'updated_at' => '2024-12-04 15:41:32'
             ],
-
         ];
-
 
         foreach ($products as $product) {
             Product::create($product);

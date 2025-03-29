@@ -18,4 +18,8 @@ return [
     'created' => 'Categoria a fost creată cu succes',
     'updated' => 'Categoria a fost actualizată cu succes',
     'deleted' => 'Categoria a fost ștearsă cu succes',
+    'created_successfully' => 'Categoria a fost creată cu succes',
+    'updated_successfully' => 'Categoria a fost actualizată cu succes',
+    'deleted_successfully' => 'Categoria a fost ștearsă cu succes',
+    'no_categories' => 'Nu există categorii disponibile',
 ];

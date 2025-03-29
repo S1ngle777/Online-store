@@ -33,7 +33,8 @@
                                     <div class="mt-4 flex space-x-2 justify-end">
                                         <a href="{{ route('categories.edit', $category) }}"
                                             class="text-indigo-600 hover:text-indigo-900 font-bold">{{ __('categories.edit_category') }}</a>
-                                        <form action="{{ route('categories.destroy', $category) }}" method="POST">
+                                        <form action="{{ route('categories.destroy', $category) }}" method="POST"
+                                              onsubmit="return confirm('{{ __('categories.confirm_delete') }}')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"

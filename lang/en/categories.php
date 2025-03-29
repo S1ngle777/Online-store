@@ -18,4 +18,8 @@ return [
     'created' => 'Category has been created successfully',
     'updated' => 'Category has been updated successfully',
     'deleted' => 'Category has been deleted successfully',
+    'created_successfully' => 'Category created successfully',
+    'updated_successfully' => 'Category updated successfully',
+    'deleted_successfully' => 'Category deleted successfully',
+    'no_categories' => 'No categories available',
 ];

@@ -41,24 +41,45 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|max:255',
-            'content' => 'required',
+            'title_ru' => 'required|max:255',
+            'title_ro' => 'required|max:255',
+            'title_en' => 'required|max:255',
+            'content_ru' => 'required',
+            'content_ro' => 'required',
+            'content_en' => 'required',
             'image' => 'nullable|image|max:2048',
             'is_published' => 'boolean'
         ]);
 
-        $validated['slug'] = Str::slug($validated['title']);
-        $validated['user_id'] = auth()->id();
+        // Создаем новый экземпляр поста
+        $post = new Post();
         
-        if ($request->is_published) {
-            $validated['published_at'] = now();
+        // Устанавливаем переводы для заголовка
+        $post->setTranslation('title', 'ru', $request->title_ru);
+        $post->setTranslation('title', 'ro', $request->title_ro);
+        $post->setTranslation('title', 'en', $request->title_en);
+        
+        // Устанавливаем переводы для содержимого
+        $post->setTranslation('content', 'ru', $request->content_ru);
+        $post->setTranslation('content', 'ro', $request->content_ro);
+        $post->setTranslation('content', 'en', $request->content_en);
+        
+        // Создаем ЧПУ (slug) из русского заголовка (или можно выбрать любой язык)
+        $post->slug = Str::slug($request->title_ru);
+        $post->user_id = auth()->id();
+        
+        // Обработка статуса публикации
+        $post->is_published = $request->boolean('is_published');
+        if ($post->is_published) {
+            $post->published_at = now();
         }
 
+        // Обработка загрузки изображения
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('posts', 'public');
+            $post->image = $request->file('image')->store('posts', 'public');
         }
 
-        Post::create($validated);
+        $post->save();
 
         return redirect()->route('blog.index')
             ->with('success', __('blog.created_successfully'));
@@ -72,11 +93,28 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'title_ru' => 'required|max:255',
+            'title_ro' => 'required|max:255',
+            'title_en' => 'required|max:255',
+            'content_ru' => 'required',
+            'content_ro' => 'required',
+            'content_en' => 'required',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'is_published' => 'nullable|boolean'
         ]);
+
+        // Устанавливаем переводы для заголовка
+        $post->setTranslation('title', 'ru', $request->title_ru);
+        $post->setTranslation('title', 'ro', $request->title_ro);
+        $post->setTranslation('title', 'en', $request->title_en);
+        
+        // Устанавливаем переводы для содержимого
+        $post->setTranslation('content', 'ru', $request->content_ru);
+        $post->setTranslation('content', 'ro', $request->content_ro);
+        $post->setTranslation('content', 'en', $request->content_en);
+        
+        // Обновляем slug, если изменился русский заголовок (можно выбрать любой язык)
+        $post->slug = Str::slug($request->title_ru);
 
         // Обработка статуса публикации и даты публикации
         $isNowPublished = $request->boolean('is_published');
@@ -98,12 +136,9 @@ class PostController extends Controller
             if ($post->image) {
                 Storage::disk('public')->delete($post->image);
             }
-            $validated['image'] = $request->file('image')->store('posts', 'public');
-            $post->image = $validated['image'];
+            $post->image = $request->file('image')->store('posts', 'public');
         }
 
-        $post->title = $validated['title'];
-        $post->content = $validated['content'];
         $post->save();
 
         return redirect()->route('blog.show', $post)
