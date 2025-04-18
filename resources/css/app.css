@@ -5,3 +5,11 @@
 .form-radio:focus {
     --tw-ring-color: transparent;
 }
+
+html[lang="ru"] .lg\:space-x-8 { 
+    @apply lg:space-x-7;
+}
+
+html[lang="ro"] .lg\:space-x-8 { 
+    @apply lg:space-x-6;
+}
