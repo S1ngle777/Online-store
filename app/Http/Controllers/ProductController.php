@@ -14,6 +14,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $query = Product::query();
+        $locale = app()->getLocale(); // Получаем текущую локаль
 
         // Фильтр по категориям (множественный выбор)
         if ($request->has('categories')) {
@@ -36,8 +37,12 @@ class ProductController extends Controller
         // Сортировка с дефолтным значением name_asc
         $sort = $request->get('sort', 'name_asc');
         switch ($sort) {
+            // Используем orderByRaw для сортировки по JSON
+            case 'name_asc':
+                $query->orderByRaw("json_extract(name, '$.{$locale}') ASC");
+                break;
             case 'name_desc':
-                $query->orderBy('name', 'desc');
+                $query->orderByRaw("json_extract(name, '$.{$locale}') DESC");
                 break;
             case 'price_asc':
                 $query->orderBy('price', 'asc');
@@ -52,7 +57,8 @@ class ProductController extends Controller
                 $query->orderBy('created_at', 'asc');
                 break;
             default:
-                $query->orderBy('name', 'asc');
+                // По умолчанию сортировка по названию (А-Я) для текущей локали
+                $query->orderByRaw("json_extract(name, '$.{$locale}') ASC");
         }
 
         $products = $query->paginate(9)->withQueryString();
