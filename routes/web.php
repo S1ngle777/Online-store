@@ -105,4 +105,8 @@ Route::get('language/{locale}', function ($locale) {
     return redirect()->back();
 })->name('language');
 
+Route::get('/privacy', function () {
+    return view('pages.privacy');
+})->name('privacy.policy');
+
 require __DIR__.'/auth.php';

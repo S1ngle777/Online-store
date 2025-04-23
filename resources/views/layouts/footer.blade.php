@@ -48,10 +48,14 @@
             </div>
         </div>
 
-        {{-- <div class="mt-8 pt-8 border-t border-gray-200">
+        <div class="mt-4 pt-4 border-t border-gray-200">
             <p class="text-center text-gray-500 text-sm">
-                © {{ date('Y') }} Молдавские изделия ручной работы. Все права защищены.
+                © {{ date('Y') }} Молдавские изделия ручной работы.
             </p>
-        </div> --}}
+        </div>
+        
+        <div class="text-center">
+            <a href="{{ route('privacy.policy') }}" class="text-gray-600 hover:text-primary text-sm">{{ __('privacy.title') }}</a>
+        </div>
     </div>
 </footer>
