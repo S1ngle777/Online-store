@@ -16,22 +16,37 @@ class ProductController extends Controller
         $query = Product::query();
         $locale = app()->getLocale(); // Получаем текущую локаль
 
-        // Фильтр по категориям (множественный выбор)
-        if ($request->has('categories')) {
-            $query->whereIn('category_id', $request->categories);
-        }
+        // Фильтр по цене с учетом скидок
+        if ($request->filled('price_from') || $request->filled('price_to')) {
+            $filteredProducts = $query->get();
 
-        // Фильтр "Только в наличии"
-        if ($request->has('in_stock')) {
-            $query->where('stock', '>', 0);
-        }
+            // Отфильтруем по вычисленной цене со скидкой
+            $filteredIds = $filteredProducts->filter(function ($product) use ($request) {
+                $discountedPrice = $product->getDiscountedPriceAttribute();
 
-        // Фильтр по цене
-        if ($request->filled('price_from')) {
-            $query->where('price', '>=', $request->price_from);
-        }
-        if ($request->filled('price_to')) {
-            $query->where('price', '<=', $request->price_to);
+                if ($request->filled('price_from') && $discountedPrice < (float) $request->price_from) {
+                    return false;
+                }
+
+                if ($request->filled('price_to') && $discountedPrice > (float) $request->price_to) {
+                    return false;
+                }
+
+                return true;
+            })->pluck('id')->toArray();
+
+            // Создаем новый запрос с отфильтрованными ID
+            $query = Product::whereIn('id', $filteredIds);
+
+            // Фильтр по категориям (множественный выбор)
+            if ($request->has('categories')) {
+                $query->whereIn('category_id', $request->categories);
+            }
+
+            // Фильтр "Только в наличии"
+            if ($request->has('in_stock')) {
+                $query->where('stock', '>', 0);
+            }
         }
 
         // Сортировка с дефолтным значением name_asc
