@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('order_number #') }}{{ $order->id }}
+                {{ __('messages.order_number')}}: {{ $order->id }}
             </h2>
             @if (auth()->user()->isAdmin())
                 <div class="flex items-center space-x-4">
