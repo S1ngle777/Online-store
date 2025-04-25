@@ -181,7 +181,7 @@
                                         <div class="mt-2 flex space-x-2 justify-end">
                                             <a href="{{ route('products.edit', $product) }}"
                                                 class="text-indigo-600 hover:text-indigo-900 font-bold">{{ __('products.edit') }}</a>
-                                            <form action="{{ route('products.destroy', $product) }}" method="POST">
+                                            <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('{{ __('products.delete_confirm') }}')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
