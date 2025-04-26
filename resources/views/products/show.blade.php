@@ -77,6 +77,31 @@
                             @endif
                             <p class="text-gray-600 mt-2">{{ __('products.in_stock') }}: {{ $product->stock }}</p>
                             
+                            {{-- Отображение размеров для неавторизованных пользователей --}}
+                            @guest
+                                @if($product->has_sizes)
+                                    <div class="mt-4">
+                                        <div class="flex flex-wrap gap-2">
+                                            @foreach($product->sizes as $size)
+                                                <div class="relative">
+                                                    <span class="block min-w-[3rem] text-center py-2 px-3 border rounded-md 
+                                                           {{ $size->pivot->stock <= 0 
+                                                               ? 'bg-gray-100 text-gray-400 border-gray-200' 
+                                                               : 'bg-white text-gray-700 border-gray-300' }}">
+                                                        {{ $size->name }}
+                                                    </span>
+                                                    @if($size->pivot->stock > 0)
+                                                        <span class="absolute -top-2 -right-2 bg-gray-500 text-white text-xs px-1 rounded-full">
+                                                            {{ $size->pivot->stock }} {{ __('products.pieces') }}
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+                            @endguest
+                            
                             @auth
                                 <form action="{{ route('cart.add', $product) }}" method="POST" class="mt-6">
                                     @csrf
