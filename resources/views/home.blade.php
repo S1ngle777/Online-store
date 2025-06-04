@@ -17,17 +17,17 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     @foreach ($posts as $post)
-                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <div class="p-6">
+                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex flex-col h-full">
+                            <div class="p-6 flex flex-col flex-grow">
                                 @if ($post->image)
                                     <img src="{{ Storage::url($post->image) }}" alt="{{ $post->title }}"
                                         class="w-full h-48 object-cover mb-4">
                                 @endif
                                 <h3 class="text-xl font-semibold mb-2">{{ $post->title }}</h3>
-                                <p class="text-gray-600 mb-4">
+                                <p class="text-gray-600 mb-4 flex-grow">
                                     {{ Str::limit(strip_tags($post->content), 100) }}
                                 </p>
-                                <div class="flex justify-between items-center text-sm text-gray-500">
+                                <div class="flex justify-between items-center text-sm text-gray-500 mt-auto">
                                     <span>{{ $post->published_at->format('d.m.Y') }}</span>
                                     <a href="{{ route('blog.show', $post) }}"
                                         class="text-primary hover:text-primary-dark">

@@ -18,8 +18,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach ($posts as $post)
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6">
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex flex-col h-full">
+                        <div class="p-6 flex flex-col flex-grow">
                             @if (!$post->is_published)
                                 <div class="mb-4">
                                     <span class="px-2 py-1 text-xs font-semibold text-yellow-800 bg-yellow-100 rounded-full">
@@ -35,11 +35,11 @@
                             @endif
                             
                             <h3 class="text-xl font-semibold mb-2">{{ $post->title }}</h3>
-                            <p class="text-gray-600 mb-4">
+                            <p class="text-gray-600 mb-4 flex-grow">
                                 {{ Str::limit(strip_tags($post->content), 150) }}
                             </p>
                             
-                            <div class="flex justify-between items-center text-sm text-gray-500">
+                            <div class="flex justify-between items-center text-sm text-gray-500 mt-auto">
                                 <div class="flex items-center gap-2">
                                     <span>
                                         @if($post->is_published && $post->published_at)
