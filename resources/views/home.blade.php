@@ -64,17 +64,18 @@
                 <h3 class="text-2xl font-bold mb-6">{{ __('home.products.title') }}</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     @foreach ($products as $product)
-                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <div class="p-6">
+                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex flex-col h-full">
+                            <div class="p-6 flex flex-col h-full">
                                 @if ($product->image)
                                     <a href="{{ route('products.show', $product) }}" class="block mb-4">
                                         <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}"
+
                                             class="w-full h-48 object-cover transition-opacity hover:opacity-75">
                                     </a>
                                 @endif
                                 <h3 class="text-lg font-semibold">{{ $product->name }}</h3>
-                                <p class="text-gray-600">{{ Str::limit($product->description, 100) }}</p>
-                                <div class="mt-4">
+                                <p class="text-gray-600 flex-grow">{{ Str::limit($product->description, 100) }}</p>
+                                <div class="mt-auto pt-4">
                                     <div class="flex justify-between items-center">
                                         <div>
                                             @if ($product->hasActiveDiscount())
@@ -108,17 +109,17 @@
             <!-- FAQ секция -->
             <div class="mt-12">
                 <h3 class="text-2xl font-bold mb-8 text-center">{{ __('home.faq.title') }}</h3>
-                
+
                 <div class="max-w-3xl mx-auto space-y-4">
                     @foreach(['how_to_order', 'payment_methods', 'delivery_time', 'return_policy'] as $faq)
                         <div x-data="{ open: false }" class="border rounded-lg overflow-hidden">
-                            <button @click="open = !open" 
+                            <button @click="open = !open"
                                     class="w-full flex items-center justify-between p-4 bg-white hover:bg-gray-50">
                                 <span class="font-medium">{{ __("home.faq.questions.{$faq}") }}</span>
-                                <svg class="w-5 h-5 transform transition-transform duration-200" 
+                                <svg class="w-5 h-5 transform transition-transform duration-200"
                                      :class="{ '-rotate-180': open }"
-                                     fill="none" 
-                                     stroke="currentColor" 
+                                     fill="none"
+                                     stroke="currentColor"
                                      viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                 </svg>
