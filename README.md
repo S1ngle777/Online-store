@@ -1,6 +1,6 @@
 # Online Store
 
-![Laravel](https://img.shields.io/badge/Laravel-10-red?style=flat-square&logo=laravel) ![PHP](https://img.shields.io/badge/PHP-8.1+-blue?style=flat-square&logo=php) ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square) ![GitHub stars](https://img.shields.io/github/stars/S1ngle777/Online-store?style=flat-square)
+![Laravel](https://img.shields.io/badge/Laravel-10-red?style=flat-square&logo=laravel) ![PHP](https://img.shields.io/badge/PHP-8.1+-blue?style=flat-square&logo=php) ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square) ![Last Commit](https://img.shields.io/github/last-commit/S1ngle777/Online-store?style=flat-square)
 
 A modern, feature-rich e-commerce platform built with Laravel that provides a seamless shopping experience for customers and comprehensive management tools for administrators.
 
