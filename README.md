@@ -1,66 +1,246 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Online Store
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![Laravel](https://img.shields.io/badge/Laravel-10-red?style=flat-square&logo=laravel) ![PHP](https://img.shields.io/badge/PHP-8.1+-blue?style=flat-square&logo=php) ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square) ![GitHub stars](https://img.shields.io/github/stars/S1ngle777/Online-store?style=flat-square)
 
-## About Laravel
+A modern, feature-rich e-commerce platform built with Laravel that provides a seamless shopping experience for customers and comprehensive management tools for administrators.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Table of Contents
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- [Description](#description)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Screenshots](#screenshots)
+- [Deployment](#deployment)
+- [License](#license)
+- [Contact](#contact)
+- [Acknowledgments](#acknowledgments)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Description
 
-## Learning Laravel
+This online store is a full-featured e-commerce solution designed to handle all aspects of online retail business. The platform offers an intuitive user interface for customers to browse products, manage their shopping cart, and complete purchases, while providing administrators with powerful tools to manage inventory, orders, and customer relationships.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Features
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Customer Features
+- 🛍️ **Product Catalog** - Browse products with detailed descriptions, images, and specifications
+- 🛒 **Shopping Cart** - Add, remove, and manage items with real-time price calculations
+- 👤 **User Authentication** - Secure registration, login, and profile management
+- 🔍 **Advanced Search & Filtering** - Find products by category, price range, and availability
+- ⭐ **Product Reviews & Ratings** - Read and write product reviews with star ratings
+- 📱 **Responsive Design** - Optimized for desktop, tablet, and mobile devices
+- 🌐 **Multi-language Support** - Available in multiple languages (RU, RO, EN)
+- 💰 **Discount System** - Automatic discount calculations and promotional pricing
+- 📦 **Order Tracking** - Track order status from placement to delivery
+- 📍 **Multiple Delivery Options** - Various shipping methods with cost calculations
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Admin Features
+- 📊 **Admin Dashboard** - Comprehensive overview of store performance
+- 📦 **Product Management** - Add, edit, and delete products with inventory tracking
+- 🏷️ **Category Management** - Organize products into categories and subcategories
+- 📋 **Order Management** - Process orders, update status, and manage fulfillment
+- 👥 **User Management** - View and manage customer accounts
+- 📈 **Sales Analytics** - Track sales performance and generate reports
+- 💬 **Review Moderation** - Manage customer reviews and respond as admin
+- 🎯 **Discount Management** - Create and manage promotional campaigns
 
-## Laravel Sponsors
+### Technical Features
+- 📧 **Email Notifications** - Automated order confirmations and updates
+- 🗄️ **Database Optimization** - Efficient data storage and retrieval
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Technologies Used
 
-### Premium Partners
+### Backend
+- **PHP 8.1+** - Server-side programming language
+- **Laravel 10** - PHP web application framework
+- **SQLite** - Database management system
+- **Eloquent ORM** - Database abstraction layer
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+### Frontend
+- **Blade Templates** - Laravel's templating engine
+- **HTML5 & CSS3** - Modern web standards
+- **JavaScript** - Client-side interactivity
+- **Tailwind CSS** - Utility-first CSS framework
+- **Vite** - Frontend build tool
 
-## Contributing
+### Additional Libraries & Tools
+- **Spatie Laravel Translatable** - Multi-language support
+- **Laravel Breeze** - Authentication scaffolding
+- **Laravel Sanctum** - API authentication
+- **Composer** - PHP dependency management
+- **NPM** - JavaScript package management
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Project Structure
 
-## Code of Conduct
+```
+├── app/
+│   ├── Http/Controllers/       # Application controllers
+│   ├── Models/                 # Eloquent models
+│   ├── Services/              # Business logic services
+│   └── Notifications/         # Email notifications
+├── database/
+│   ├── migrations/            # Database migrations
+│   ├── seeders/              # Database seeders
+│   └── factories/            # Model factories
+├── resources/
+│   ├── views/                # Blade templates
+│   ├── css/                  # Stylesheets
+│   └── js/                   # JavaScript files
+├── routes/
+│   ├── web.php               # Web routes
+│   └── auth.php              # Authentication routes
+├── public/                   # Public assets
+├── storage/                  # File storage
+└── tests/                    # Unit and feature tests
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Installation
 
-## Security Vulnerabilities
+### Prerequisites
+- PHP 8.1 or higher
+- Composer
+- Node.js & NPM
+- MySQL or SQLite
+- Web server (Apache/Nginx) or Laravel's built-in server
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Steps
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/S1ngle777/Online-store.git
+   cd Online-store
+   ```
+
+2. **Install PHP dependencies**
+   ```bash
+   composer install
+   ```
+
+3. **Install JavaScript dependencies**
+   ```bash
+   npm install
+   ```
+
+4. **Environment configuration**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+5. **Configure database**
+   Edit the `.env` file with your database credentials:
+   ```env
+   DB_CONNECTION=sqlite
+   # DB_HOST=127.0.0.1
+   # DB_PORT=3306
+   # DB_DATABASE=database/database.sqlite
+   # DB_USERNAME=root
+   # DB_PASSWORD=
+   ```
+
+6. **Run database migrations and seeders**
+   ```bash
+   php artisan migrate --seed
+   ```
+
+7. **Create storage symlink**
+   ```bash
+   php artisan storage:link
+   ```
+
+8. **Build frontend assets**
+   ```bash
+   npm run build
+   ```
+
+9. **Start the development server**
+   ```bash
+   php artisan serve
+   ```
+
+10. **Access the application**
+    Open your browser and navigate to `http://localhost:8000`
+
+### Default Admin Account
+After running the seeders, you can log in with:
+- **Email**: admin@example.com
+- **Password**: adminadmin
+
+## Usage
+
+### For Customers
+1. **Browse Products**: Visit the homepage to see featured products and categories
+2. **Search & Filter**: Use the search bar and filters to find specific products
+3. **Product Details**: Click on any product to view detailed information and reviews
+4. **Add to Cart**: Select size (if applicable) and add products to your shopping cart
+5. **Checkout**: Proceed to checkout, fill in delivery details, and complete your order
+6. **Track Orders**: View your order history and track current orders in your profile
+
+### For Administrators
+1. **Admin Access**: Log in with admin credentials
+2. **Manage Products**: Navigate to the admin panel to add, edit, or remove products
+3. **Process Orders**: Monitor incoming orders and update their status
+4. **Manage Categories**: Create and organize product categories
+5. **Review Management**: Moderate customer reviews and provide admin responses
+
+## Screenshots
+
+### Homepage
+![Homepage](screenshots/homepage.png)
+
+### Product Catalog
+![Product Catalog](screenshots/catalog.png)
+
+### Product Details
+![Product Details](screenshots/product-details.png)
+
+### Shopping Cart
+![Shopping Cart](screenshots/cart.png)
+
+### Checkout Process
+![Checkout](screenshots/checkout.png)
+
+### Product Management
+![Product Management](screenshots/admin-products.png)
+
+## Deployment
+
+### Production Deployment
+1. Set `APP_ENV=production` in `.env`
+2. Set `APP_DEBUG=false` in `.env`
+3. Configure your web server
+4. Set up SSL certificates
+5. Configure caching:
+   ```bash
+   php artisan config:cache
+   php artisan route:cache
+   php artisan view:cache
+   ```
+
+### Environment Variables
+Key environment variables to configure:
+- `APP_URL` - Your domain URL
+- `MAIL_*` - Email service configuration
+- `DB_*` - Database connection settings
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+- **Developer**: Nikita
+- **Email**: nniebogha@gmail.com
+- **GitHub**: [@S1ngle777](https://github.com/S1ngle777)
+- **Project Repository**: [Online-store](https://github.com/S1ngle777/Online-store)
+
+## Acknowledgments
+
+- Laravel community for the excellent framework
+- Open source libraries that made this project possible
+
+---
+
+**Made with ❤️ using Laravel**
