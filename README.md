@@ -165,7 +165,7 @@ This online store is a full-featured e-commerce solution designed to handle all 
 
 ### Default Admin Account
 After running the seeders, you can log in with:
-- **Email**: admin@example.com
+- **Email**: admin@gmail.com
 - **Password**: adminadmin
 
 ## Usage
