@@ -1,6 +1,8 @@
-# Online Store
+<h1 align="center">Online Store</h1>
 
-![Laravel](https://img.shields.io/badge/Laravel-10-red?style=flat-square&logo=laravel) ![PHP](https://img.shields.io/badge/PHP-8.1+-blue?style=flat-square&logo=php) ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square) ![Last Commit](https://img.shields.io/github/last-commit/S1ngle777/Online-store?style=flat-square)
+<p align="center">
+<img src="https://img.shields.io/badge/Laravel-10-red?style=flat-square&logo=laravel" alt="Laravel"> <img src="https://img.shields.io/badge/PHP-8.1+-blue?style=flat-square&logo=php" alt="PHP"> <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License"> <img src="https://img.shields.io/github/last-commit/S1ngle777/Online-store?style=flat-square" alt="Last Commit">
+</p>
 
 A modern, feature-rich e-commerce platform built with Laravel that provides a seamless shopping experience for customers and comprehensive management tools for administrators.
 
@@ -243,4 +245,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Made with ❤️ using Laravel**
+<p align="center">
+<strong>Made with ❤️ using Laravel</strong>
+</p>
